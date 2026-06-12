@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function untuk cek apakah user sudah login
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Secara default, tolak semua akses baca/tulis ke seluruh database
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Hanya izinkan user yang sudah login untuk mengakses koleksi berikut
+    match /plants/{document} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /vehicles/{document} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /trips/{document} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /invoices/{document} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /invoiceItems/{document} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /additionalCosts/{document} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /companyProfile/{document} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}
