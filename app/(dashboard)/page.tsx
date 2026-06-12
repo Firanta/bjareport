@@ -306,34 +306,36 @@ export default function DashboardPage() {
               </p>
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={chartData} barGap={4} barCategoryGap="35%">
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                <XAxis
-                  dataKey="plant"
-                  tick={{ fontSize: 11, fill: "rgba(255,255,255,0.45)" }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <YAxis
-                  tick={{ fontSize: 11, fill: "rgba(255,255,255,0.45)" }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <Tooltip
-                  contentStyle={{
-                    borderRadius: 8,
-                    border: "1px solid rgba(139,92,246,0.3)",
-                    background: "rgba(15,0,30,0.9)",
-                    color: "white",
-                    fontSize: 12,
-                  }}
-                />
-                <Legend wrapperStyle={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }} />
-                <Bar dataKey="trips" name="Jumlah Trip" fill="#a855f7" radius={[4,4,0,0]} />
-                <Bar dataKey="kubikasi" name="Kubikasi (m³)" fill="#10b981" radius={[4,4,0,0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <div style={{ width: "100%", height: 220, position: "relative" }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} barGap={4} barCategoryGap="35%">
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <XAxis
+                    dataKey="plant"
+                    tick={{ fontSize: 11, fill: "rgba(255,255,255,0.45)" }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    tick={{ fontSize: 11, fill: "rgba(255,255,255,0.45)" }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      borderRadius: 8,
+                      border: "1px solid rgba(139,92,246,0.3)",
+                      background: "rgba(15,0,30,0.9)",
+                      color: "white",
+                      fontSize: 12,
+                    }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }} />
+                  <Bar dataKey="trips" name="Jumlah Trip" fill="#a855f7" radius={[4,4,0,0]} />
+                  <Bar dataKey="kubikasi" name="Kubikasi (m³)" fill="#10b981" radius={[4,4,0,0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           )}
         </div>
 
