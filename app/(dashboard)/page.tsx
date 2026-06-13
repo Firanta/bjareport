@@ -308,7 +308,7 @@ export default function DashboardPage() {
           ) : (
             <div style={{ width: "100%", height: 220, position: "relative" }}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} barGap={4} barCategoryGap="35%">
+                <BarChart data={chartData} barGap={6} barCategoryGap="35%">
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
                   <XAxis
                     dataKey="plant"
@@ -316,12 +316,25 @@ export default function DashboardPage() {
                     axisLine={false}
                     tickLine={false}
                   />
+                  {/* Left Y Axis for Trips */}
                   <YAxis
+                    yAxisId="left"
                     tick={{ fontSize: 11, fill: "rgba(255,255,255,0.45)" }}
                     axisLine={false}
                     tickLine={false}
+                    label={{ value: 'Trip', angle: -90, position: 'insideLeft', style: { fill: 'rgba(255,255,255,0.3)', fontSize: 10 } }}
+                  />
+                  {/* Right Y Axis for Kubikasi */}
+                  <YAxis
+                    yAxisId="right"
+                    orientation="right"
+                    tick={{ fontSize: 11, fill: "rgba(255,255,255,0.45)" }}
+                    axisLine={false}
+                    tickLine={false}
+                    label={{ value: 'm³', angle: 90, position: 'insideRight', style: { fill: 'rgba(255,255,255,0.3)', fontSize: 10 } }}
                   />
                   <Tooltip
+                    cursor={{ fill: "rgba(255, 255, 255, 0.04)" }}
                     contentStyle={{
                       borderRadius: 8,
                       border: "1px solid rgba(139,92,246,0.3)",
@@ -331,8 +344,8 @@ export default function DashboardPage() {
                     }}
                   />
                   <Legend wrapperStyle={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }} />
-                  <Bar dataKey="trips" name="Jumlah Trip" fill="#a855f7" radius={[4,4,0,0]} />
-                  <Bar dataKey="kubikasi" name="Kubikasi (m³)" fill="#10b981" radius={[4,4,0,0]} />
+                  <Bar yAxisId="left" dataKey="trips" name="Jumlah Trip" fill="#a855f7" radius={[4,4,0,0]} />
+                  <Bar yAxisId="right" dataKey="kubikasi" name="Kubikasi (m³)" fill="#10b981" radius={[4,4,0,0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
