@@ -20,7 +20,10 @@ export const maxDuration = 60;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapRestFields(doc: any): any {
   const fields = doc.fields || {};
-  const result: any = { id: doc.name.split("/").pop() };
+  const result: any = {};
+  if (doc && doc.name) {
+    result.id = doc.name.split("/").pop();
+  }
   for (const [key, val] of Object.entries(fields)) {
     const valueObj: any = val;
     if ("stringValue" in valueObj) result[key] = valueObj.stringValue;
@@ -51,13 +54,26 @@ function mapRestFields(doc: any): any {
 async function fetchRestDoc(collectionName: string, docId: string, token: string) {
   const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
   const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collectionName}/${docId}`;
+
+  console.log(`[fetchRestDoc] Fetching ${collectionName}/${docId}`);
+  console.log(`[fetchRestDoc] URL: ${url}`);
+  console.log(`[fetchRestDoc] Project ID: ${projectId}`);
+  console.log(`[fetchRestDoc] Token: ${token ? `${token.substring(0, 15)}...${token.substring(token.length - 15)}` : "missing"}`);
+
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
   if (!res.ok) {
-    throw new Error(`Failed to fetch doc ${docId} from ${collectionName}: ${res.statusText}`);
+    let errorDetails = "";
+    try {
+      errorDetails = await res.text();
+    } catch (e) {
+      errorDetails = `Failed to parse error response: ${e}`;
+    }
+    console.error(`[fetchRestDoc] Failed to fetch doc. Status: ${res.status} ${res.statusText}. Details:`, errorDetails);
+    throw new Error(`Failed to fetch doc ${docId} from ${collectionName}: ${res.statusText} (${res.status}). Details: ${errorDetails}`);
   }
   const data = await res.json();
   return mapRestFields(data);

@@ -12,7 +12,7 @@ import React, {
   useCallback,
 } from "react";
 import type { User } from "firebase/auth";
-import { onAuthChange, logout as firebaseLogout } from "@/lib/firebase/auth";
+import { onTokenChange, logout as firebaseLogout } from "@/lib/firebase/auth";
 import Cookies from "js-cookie";
 
 interface AuthContextType {
@@ -32,10 +32,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthChange((u) => {
+    const unsubscribe = onTokenChange(async (u) => {
       setUser(u);
       setLoading(false);
-      if (!u) {
+      if (u) {
+        try {
+          const token = await u.getIdToken();
+          Cookies.set("firebase-auth-token", token, {
+            expires: 30,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            path: "/",
+          });
+        } catch (err) {
+          console.error("Failed to update token cookie:", err);
+        }
+      } else {
         Cookies.remove("firebase-auth-token", { path: '/' });
       }
     });

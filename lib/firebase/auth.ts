@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  onIdTokenChanged,
   browserLocalPersistence,
   browserSessionPersistence,
   setPersistence,
@@ -32,4 +33,8 @@ export async function logout() {
 
 export function onAuthChange(callback: (user: User | null) => void) {
   return onAuthStateChanged(getFirebaseAuth(), callback);
+}
+
+export function onTokenChange(callback: (user: User | null) => void) {
+  return onIdTokenChanged(getFirebaseAuth(), callback);
 }
