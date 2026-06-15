@@ -8,9 +8,9 @@ import { z } from "zod";
 import {
   ArrowLeft,
   Loader2,
-  AlertCircle,
   CheckCircle2,
 } from "lucide-react";
+import { Alert } from "@/components/ui/alert";
 import Link from "next/link";
 import { usePlants } from "@/hooks/usePlants";
 import { useVehicles } from "@/hooks/useVehicles";
@@ -121,23 +121,9 @@ export function TripForm({ defaultValues, tripId, mode }: TripFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Duplicate error */}
       {duplicateError && (
-        <div
-          className="flex items-center gap-3 p-4 rounded-xl border"
-          style={{
-            background: "#fee2e2",
-            borderColor: "#fca5a5",
-            color: "#991b1b",
-          }}
-        >
-          <AlertCircle className="w-5 h-5 shrink-0" />
-          <div>
-            <p className="font-semibold">Nomor Surat Jalan Duplikat</p>
-            <p className="text-sm">
-              Surat Jalan dengan nomor tersebut sudah pernah diinput. Periksa
-              kembali nomor yang Anda masukkan.
-            </p>
-          </div>
-        </div>
+        <Alert variant="danger" title="Nomor Surat Jalan Duplikat" dismissible onDismiss={() => setDuplicateError(false)}>
+          Surat Jalan dengan nomor tersebut sudah pernah diinput. Periksa kembali nomor yang Anda masukkan.
+        </Alert>
       )}
 
       {/* Form Grid */}

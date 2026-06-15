@@ -26,11 +26,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" suppressHydrationWarning>
+    <html lang="id" suppressHydrationWarning data-scroll-behavior="smooth">
       <body className={`${inter.variable} font-sans antialiased`}>
         <AuthProvider>
           {children}
-          <Toaster position="top-right" richColors closeButton />
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            toastOptions={{
+              style: {
+                background: "rgba(10, 5, 20, 0.95)",
+                border: "1px solid rgba(139,92,246,0.25)",
+                backdropFilter: "blur(16px)",
+                WebkitBackdropFilter: "blur(16px)",
+                color: "rgba(255,255,255,0.9)",
+                boxShadow: "0 20px 60px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(139,92,246,0.1)",
+              },
+            }}
+          />
         </AuthProvider>
       </body>
     </html>
