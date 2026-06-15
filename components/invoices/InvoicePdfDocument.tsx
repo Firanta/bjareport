@@ -349,7 +349,7 @@ const RenderPageHeader = ({
     atasNama: company?.atasNama || DEFAULT_COMPANY.atasNama,
   };
 
-  const logoPath = path.join(process.cwd(), "public/logo.png");
+  const logoPath = "https://i.ibb.co.com/wZPZ1NKN/bjalogo.jpg";
   const displayPlantNama = plantNama.toUpperCase().startsWith("PLANT")
     ? plantNama.toUpperCase()
     : `PLANT ${plantNama.toUpperCase()}`;

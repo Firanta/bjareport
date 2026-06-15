@@ -11,13 +11,88 @@ import { renderToBuffer } from "@react-pdf/renderer";
 import { createElement } from "react";
 import { InvoicePdfDocument } from "@/components/invoices/InvoicePdfDocument";
 import { uploadToCloudinary } from "@/lib/cloudinary";
-import { getFirebaseDb } from "@/lib/firebase/config";
-import { getDoc, doc } from "firebase/firestore";
-import { getTripsForInvoice, getCompanyProfile } from "@/lib/firebase/firestore";
 import type { Invoice, Trip, CompanyProfile } from "@/types";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
+
+// Helper to map Firestore REST API fields to standard JS objects
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapRestFields(doc: any): any {
+  const fields = doc.fields || {};
+  const result: any = { id: doc.name.split("/").pop() };
+  for (const [key, val] of Object.entries(fields)) {
+    const valueObj: any = val;
+    if ("stringValue" in valueObj) result[key] = valueObj.stringValue;
+    else if ("integerValue" in valueObj) result[key] = parseInt(valueObj.integerValue, 10);
+    else if ("doubleValue" in valueObj) result[key] = parseFloat(valueObj.doubleValue);
+    else if ("booleanValue" in valueObj) result[key] = valueObj.booleanValue;
+    else if ("arrayValue" in valueObj) {
+      result[key] = (valueObj.arrayValue.values || []).map((v: any) => {
+        if ("mapValue" in v) return mapRestFields(v.mapValue);
+        if ("stringValue" in v) return v.stringValue;
+        if ("integerValue" in v) return parseInt(v.integerValue, 10);
+        if ("doubleValue" in v) return parseFloat(v.doubleValue);
+        if ("booleanValue" in v) return v.booleanValue;
+        return v;
+      });
+    } else if ("mapValue" in valueObj) {
+      result[key] = mapRestFields(valueObj.mapValue);
+    } else if ("timestampValue" in valueObj) {
+      result[key] = valueObj.timestampValue;
+    } else {
+      result[key] = valueObj;
+    }
+  }
+  return result;
+}
+
+// REST API fetch helpers using User's ID token
+async function fetchRestDoc(collectionName: string, docId: string, token: string) {
+  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collectionName}/${docId}`;
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch doc ${docId} from ${collectionName}: ${res.statusText}`);
+  }
+  const data = await res.json();
+  return mapRestFields(data);
+}
+
+async function queryRestDocs(collectionName: string, filterField: string, filterValue: string, token: string) {
+  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents:runQuery`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      structuredQuery: {
+        from: [{ collectionId: collectionName }],
+        where: {
+          fieldFilter: {
+            field: { fieldPath: filterField },
+            op: "EQUAL",
+            value: { stringValue: filterValue },
+          },
+        },
+      },
+    }),
+  });
+  if (!res.ok) {
+    throw new Error(`Query failed on ${collectionName}: ${res.statusText}`);
+  }
+  const data = await res.json();
+  return data
+    .filter((item: any) => item.document)
+    .map((item: any) => mapRestFields(item.document));
+}
 
 // POST: Generate PDF and upload to Cloudinary (used during invoice generation)
 export async function POST(req: NextRequest) {
@@ -69,22 +144,48 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Missing id parameter" }, { status: 400 });
     }
 
-    const db = getFirebaseDb();
-    const invoiceSnap = await getDoc(doc(db, "invoices", id));
-    if (!invoiceSnap.exists()) {
-      return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
+    // Get Auth Token from cookies
+    const token = req.cookies.get("firebase-auth-token")?.value;
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized: Missing auth token" }, { status: 401 });
     }
 
-    const invoice = { id: invoiceSnap.id, ...invoiceSnap.data() } as Invoice;
-    const trips = await getTripsForInvoice(id);
-    const company = await getCompanyProfile() || {
-      nama: "H. SUPANDI",
-      alamat: "Kp. Tunggilis RT 002/007, Desa Situsari, Kec. Cileungsi, Kab. Bogor",
-      noHp: "085882389089",
-      bank: "BCA",
-      rekening: "4060297636",
-      atasNama: "H. SUPANDI",
-    };
+    // Fetch invoice details using REST API with authentication
+    const invoice = await fetchRestDoc("invoices", id, token) as Invoice;
+
+    // Fetch related invoiceItems
+    const invoiceItems = await queryRestDocs("invoiceItems", "invoiceId", id, token);
+    const tripIds = invoiceItems.map((item: any) => item.tripId).filter(Boolean);
+
+    // Fetch trips details
+    const trips: Trip[] = [];
+    if (tripIds.length > 0) {
+      const tripPromises = tripIds.map((tid: string) =>
+        fetchRestDoc("trips", tid, token).catch((e) => {
+          console.error(`Error loading trip ${tid}:`, e);
+          return null;
+        })
+      );
+      const tripDocs = await Promise.all(tripPromises);
+      trips.push(...(tripDocs.filter(Boolean) as Trip[]));
+      // Sort trips by date ascending
+      trips.sort((a, b) => a.tanggal.localeCompare(b.tanggal));
+    }
+
+    // Fetch company profile
+    let company: CompanyProfile;
+    try {
+      company = await fetchRestDoc("companyProfile", "default", token) as CompanyProfile;
+    } catch {
+      company = {
+        nama: "H. SUPANDI",
+        alamat: "Kp. Tunggilis RT 002/007, Desa Situsari, Kec. Cileungsi, Kab. Bogor",
+        noHp: "085882389089",
+        bank: "BCA",
+        rekening: "4060297636",
+        atasNama: "H. SUPANDI",
+      };
+    }
 
     // Render PDF buffer
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
