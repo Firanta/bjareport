@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Navbar } from "@/components/layout/Navbar";
+import { useAuth } from "@/lib/auth/context";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 const ParticleBackground = dynamic(
@@ -16,6 +18,29 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/login");
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div
+          className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin"
+          style={{ borderColor: "var(--brand-500)" }}
+        />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null; // Prevents flashing dashboard content while redirecting
+  }
 
   return (
     <div className="relative min-h-screen" style={{ background: "#000" }}>
