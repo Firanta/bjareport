@@ -103,7 +103,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         >
           <div className="flex items-center gap-3">
             <img
-              src="https://i.ibb.co.com/wZPZ1NKN/bjalogo.jpg"
+              src="https://i.ibb.co.com/bGPrxV1/logov3.png"
               alt="BJA Logo"
               className="w-9 h-9 rounded-lg object-cover border border-white/10"
             />

@@ -62,7 +62,7 @@ export function AuthPage() {
         {/* Brand Logo and Name */}
         <div className="z-20 flex items-center gap-3">
           <img
-            src="https://i.ibb.co.com/wZPZ1NKN/bjalogo.jpg"
+            src="https://i.ibb.co.com/bGPrxV1/logov3.png"
             alt="BJA Logo"
             className="w-10 h-10 rounded-xl object-cover border border-white/10 shadow-lg"
           />
@@ -102,7 +102,7 @@ export function AuthPage() {
           {/* Logo on mobile only */}
           <div className="flex items-center gap-3 lg:hidden justify-center mb-4">
             <img
-              src="https://i.ibb.co.com/wZPZ1NKN/bjalogo.jpg"
+              src="https://i.ibb.co.com/bGPrxV1/logov3.png"
               alt="BJA Logo"
               className="w-10 h-10 rounded-xl object-cover border border-white/10 shadow-lg"
             />

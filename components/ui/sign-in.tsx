@@ -60,7 +60,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
             {/* Logo and Brand */}
             <div className="animate-element animate-delay-100 flex items-center gap-3">
               <img
-                src="https://i.ibb.co.com/wZPZ1NKN/bjalogo.jpg"
+                src="https://i.ibb.co.com/bGPrxV1/logov3.png"
                 alt="BJA Logo"
                 className="w-11 h-11 rounded-xl object-cover border border-white/10 shadow-lg shadow-purple-900/10"
               />
