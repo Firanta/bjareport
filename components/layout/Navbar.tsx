@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { Menu, Bell, ChevronRight } from "lucide-react";
 import { useAuth } from "@/lib/auth/context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import NotificationsWithActions from "@/components/ui/notifications-with-actions";
 
 const BREADCRUMBS: Record<string, string[]> = {
   "/": ["Dashboard"],
@@ -85,7 +86,10 @@ export function Navbar({ onMenuClick }: NavbarProps) {
       </div>
 
       {/* Right side */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
+        {/* Notifications Popover */}
+        <NotificationsWithActions placement="bottom" />
+
         {/* User info */}
         <div className="hidden sm:flex items-center gap-2 pl-2 border-l"
           style={{ borderColor: "rgba(255,255,255,0.1)" }}>

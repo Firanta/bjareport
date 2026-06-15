@@ -4,6 +4,8 @@
 import { useEffect, useState } from "react";
 import { Truck, Layers, Banknote, FileText } from "lucide-react";
 import { getTrips, getRecentInvoices, getRecentTrips, getPlants } from "@/lib/firebase/firestore";
+import { getFirebaseDb } from "@/lib/firebase/config";
+import { collection, query, orderBy, limit, where, onSnapshot } from "firebase/firestore";
 import {
   formatRupiah,
   formatNumber,
@@ -44,21 +46,57 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function load() {
-      const [allTrips, rt, ri, allPlants] = await Promise.all([
-        getTrips(),
-        getRecentTrips(5),
-        getRecentInvoices(5),
-        getPlants(),
-      ]);
-      setTrips(allTrips);
-      setRecentTrips(rt);
-      setRecentInvoices(ri);
-      setPlants(allPlants);
-      setLoading(false);
-    }
-    load();
-  }, []);
+    const db = getFirebaseDb();
+    
+    // Calculate start date for trips query (this month + last month only)
+    const lastMonthBulan = bulan === 1 ? 12 : bulan - 1;
+    const lastMonthTahun = bulan === 1 ? tahun - 1 : tahun;
+    const startQueryDate = `${lastMonthTahun}-${String(lastMonthBulan).padStart(2, "0")}-01`;
+
+    const unsubPlants = onSnapshot(
+      query(collection(db, "plants"), orderBy("nama", "asc")),
+      (snap) => {
+        setPlants(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Plant)));
+      }
+    );
+
+    const unsubRecentInvoices = onSnapshot(
+      query(collection(db, "invoices"), orderBy("createdAt", "desc"), limit(5)),
+      (snap) => {
+        setRecentInvoices(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Invoice)));
+      }
+    );
+
+    const unsubRecentTrips = onSnapshot(
+      query(collection(db, "trips"), orderBy("createdAt", "desc"), limit(5)),
+      (snap) => {
+        setRecentTrips(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Trip)));
+      }
+    );
+
+    const unsubTrips = onSnapshot(
+      query(
+        collection(db, "trips"),
+        where("tanggal", ">=", startQueryDate),
+        orderBy("tanggal", "desc")
+      ),
+      (snap) => {
+        setTrips(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Trip)));
+        setLoading(false);
+      },
+      (err) => {
+        console.error("Trips realtime error:", err);
+        setLoading(false);
+      }
+    );
+
+    return () => {
+      unsubPlants();
+      unsubRecentInvoices();
+      unsubRecentTrips();
+      unsubTrips();
+    };
+  }, [bulan, tahun]);
 
   // Filter trips for current month
   const prefix = `${tahun}-${String(bulan).padStart(2, "0")}`;
