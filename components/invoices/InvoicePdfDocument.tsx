@@ -65,16 +65,16 @@ const styles = StyleSheet.create({
     fontSize: 8.5,
     color: "#334155", // Slate 700 for softer body text
     backgroundColor: "#ffffff",
-    paddingBottom: 75, // Safety padding for absolute footer
+    paddingBottom: 70, // Safety padding for absolute footer
   },
   contentWrapper: {
     paddingHorizontal: 40,
-    paddingTop: 12,
+    paddingTop: 10,
   },
-  // Wavy Header styles (Optimized height to 100)
+  // Wavy Header styles (Optimized height to 80)
   headerContainer: {
     width: 595,
-    height: 100,
+    height: 80,
     position: "relative",
   },
   headerSvg: {
@@ -82,23 +82,23 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: 595,
-    height: 100,
+    height: 80,
   },
   headerInvoiceText: {
     position: "absolute",
     left: 40,
-    top: 32,
+    top: 25,
     color: "#ffffff",
-    fontSize: 22,
+    fontSize: 18,
     fontFamily: "Helvetica-Bold",
     letterSpacing: 1.5,
   },
   headerBrandText: {
     position: "absolute",
     right: 40,
-    top: 28,
+    top: 22,
     color: "#ffffff",
-    fontSize: 13,
+    fontSize: 11,
     fontFamily: "Helvetica-Bold",
     textAlign: "right",
     letterSpacing: 0.5,
@@ -106,9 +106,9 @@ const styles = StyleSheet.create({
   headerTaglineText: {
     position: "absolute",
     right: 40,
-    top: 45,
+    top: 36,
     color: "#93c5fd", // Light blue accent
-    fontSize: 7.5,
+    fontSize: 6.5,
     fontFamily: "Helvetica",
     textAlign: "right",
     letterSpacing: 0.5,
@@ -137,13 +137,13 @@ const styles = StyleSheet.create({
   },
   footerLabel: {
     color: "#93c5fd", // Light blue
-    fontSize: 7.5,
+    fontSize: 7,
     fontFamily: "Helvetica-Bold",
     marginRight: 4,
   },
   footerValue: {
     color: "#ffffff",
-    fontSize: 7.5,
+    fontSize: 7,
     fontFamily: "Helvetica",
     marginRight: 15,
   },
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginBottom: 12,
+    marginBottom: 10,
   },
   bodyHeaderLeft: {
     width: "48%",
@@ -163,41 +163,34 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   logo: {
-    width: 140,
-    height: 70,
+    width: 110,
+    height: 55,
     objectFit: "contain",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   companyInfoBlock: {
     flexDirection: "column",
     alignItems: "flex-end",
   },
-  companyAddressTitle: {
-    fontSize: 9,
-    fontFamily: "Helvetica-Bold",
-    color: "#0f172a", // Dark Slate
-    marginBottom: 2,
-    textAlign: "right",
-  },
   companyAddressText: {
-    fontSize: 7.5,
+    fontSize: 7,
     color: "#64748b", // Slate 500
-    lineHeight: 1.25,
+    lineHeight: 1.2,
     textAlign: "right",
   },
   metaInvoiceTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: "Helvetica-Bold",
     color: "#0f172a",
-    marginBottom: 3,
+    marginBottom: 2,
     letterSpacing: 0.5,
     textAlign: "left",
   },
   metaPlantBadge: {
-    fontSize: 8.5,
+    fontSize: 8,
     fontFamily: "Helvetica-Bold",
     color: "#0284c7", // Sky blue brand color
-    marginBottom: 6,
+    marginBottom: 4,
     textAlign: "left",
   },
   metaTable: {
@@ -210,14 +203,14 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   metaTableLabel: {
-    fontSize: 7.5,
+    fontSize: 7,
     fontFamily: "Helvetica-Bold",
     color: "#64748b",
-    width: 65,
+    width: 60,
     textAlign: "left",
   },
   metaTableValue: {
-    fontSize: 7.5,
+    fontSize: 7,
     color: "#0f172a",
     width: 120,
     textAlign: "left",
@@ -226,9 +219,9 @@ const styles = StyleSheet.create({
   detailsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 15,
+    marginBottom: 10,
     backgroundColor: "#f8fafc",
-    padding: 8,
+    padding: 6,
     borderRadius: 6,
     borderWidth: 0.5,
     borderColor: "#e2e8f0",
@@ -240,33 +233,33 @@ const styles = StyleSheet.create({
     width: "48%",
   },
   columnTitle: {
-    fontSize: 7.5,
+    fontSize: 7,
     fontFamily: "Helvetica-Bold",
     color: "#64748b",
-    marginBottom: 4,
+    marginBottom: 3,
     letterSpacing: 0.5,
   },
   columnTextBold: {
-    fontSize: 8.5,
+    fontSize: 8,
     fontFamily: "Helvetica-Bold",
     color: "#0f172a",
-    marginBottom: 2,
+    marginBottom: 1.5,
   },
   columnText: {
-    fontSize: 7.5,
+    fontSize: 7,
     color: "#475569",
-    lineHeight: 1.3,
+    lineHeight: 1.2,
   },
   // Table styles
   table: {
     width: "100%",
-    marginTop: 3,
+    marginTop: 2,
   },
   tableHeader: {
     flexDirection: "row",
     backgroundColor: "#1b2536", // Dark navy header
     alignItems: "center",
-    paddingVertical: 5,
+    paddingVertical: 4,
     borderRadius: 3,
   },
   tableRow: {
@@ -274,20 +267,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: "#cbd5e1",
     alignItems: "center",
-    paddingVertical: 3.5, // Reduced padding for compactness
+    paddingVertical: 2.5, // Even more compact
   },
   tableRowEven: {
     backgroundColor: "#f8fafc", // Alternating rows
   },
   th: {
-    fontSize: 7,
+    fontSize: 6.5,
     fontFamily: "Helvetica-Bold",
     color: "#ffffff",
     textAlign: "center",
     paddingHorizontal: 2,
   },
   td: {
-    fontSize: 7,
+    fontSize: 6.5,
     color: "#334155",
     paddingHorizontal: 2,
   },
@@ -298,32 +291,33 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   calcBox: {
-    width: "35%",
+    width: "100%",
     borderBottomWidth: 1,
     borderBottomColor: "#cbd5e1",
-    paddingBottom: 4,
+    paddingBottom: 3,
+    marginBottom: 8,
   },
   calcRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 2,
+    marginBottom: 1.5,
   },
   calcLabel: {
     fontFamily: "Helvetica",
-    fontSize: 7.5,
+    fontSize: 7,
     color: "#475569",
     width: "55%",
   },
   calcValue: {
     fontFamily: "Helvetica",
-    fontSize: 7.5,
+    fontSize: 7,
     textAlign: "right",
     width: "45%",
     color: "#0f172a",
   },
   calcValueBold: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 7.5,
+    fontSize: 7,
     textAlign: "right",
     width: "45%",
     color: "#0f172a",
@@ -332,26 +326,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "#1b2536",
-    paddingVertical: 5,
-    paddingHorizontal: 6,
+    paddingVertical: 4,
+    paddingHorizontal: 5,
     borderRadius: 3,
-    marginTop: 3,
+    marginTop: 2,
   },
   calcLabelTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 8,
+    fontSize: 7.5,
     color: "#ffffff",
   },
   calcValueTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 8,
+    fontSize: 7.5,
     textAlign: "right",
     color: "#ffffff",
   },
   // Grand Summary Total (bottom left)
   summaryContainer: {
-    marginTop: 10,
-    width: "45%",
+    width: "100%",
     backgroundColor: "#f8fafc",
     borderWidth: 1,
     borderColor: "#e2e8f0",
@@ -359,24 +352,24 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   summaryTitle: {
-    fontSize: 8,
+    fontSize: 7.5,
     fontFamily: "Helvetica-Bold",
     color: "#0f172a",
-    marginBottom: 4,
+    marginBottom: 3,
     letterSpacing: 0.5,
   },
   summaryRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 3,
+    marginBottom: 2,
   },
   summaryLabel: {
-    fontSize: 7.5,
+    fontSize: 7,
     color: "#475569",
   },
   summaryValue: {
     fontFamily: "Helvetica",
-    fontSize: 7.5,
+    fontSize: 7,
     textAlign: "right",
     color: "#0f172a",
   },
@@ -389,19 +382,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "#1b2536",
-    paddingVertical: 5,
-    paddingHorizontal: 6,
+    paddingVertical: 4,
+    paddingHorizontal: 5,
     borderRadius: 3,
-    marginTop: 3,
+    marginTop: 2,
   },
   summaryLabelTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 8,
+    fontSize: 7.5,
     color: "#ffffff",
   },
   summaryValueTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 8,
+    fontSize: 7.5,
     textAlign: "right",
     color: "#ffffff",
   },
@@ -409,12 +402,13 @@ const styles = StyleSheet.create({
   footerRow: {
     flexDirection: "row",
     justifyContent: "flex-end", // Align signature block to right
-    marginTop: 15, // Reduced space to prevent spilling to next page
+    marginTop: 8,
     paddingHorizontal: 10,
   },
   signatureContainer: {
     width: 130,
     alignItems: "center",
+    marginTop: 5,
   },
   signatureLabel: {
     fontSize: 8,
@@ -426,6 +420,20 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "center",
     marginTop: 2,
+  },
+  bottomSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginTop: 8,
+  },
+  bottomLeftCol: {
+    width: "48%",
+  },
+  bottomRightCol: {
+    width: "45%",
+    flexDirection: "column",
+    alignItems: "flex-end",
   },
 });
 
@@ -440,14 +448,14 @@ const DEFAULT_COMPANY: CompanyProfile = {
 
 const RenderPageHeader = () => {
   return (
-    <View style={styles.headerContainer}>
-      <Svg style={styles.headerSvg} viewBox="0 0 595 100">
+    <View style={styles.headerContainer} fixed>
+      <Svg style={styles.headerSvg} viewBox="0 0 595 80">
         {/* Light Grey Wave */}
-        <Path d="M 0 0 L 595 0 L 595 85 C 450 110, 200 65, 0 95 Z" fill="#f3f4f6" />
+        <Path d="M 0 0 L 595 0 L 595 70 C 450 90, 200 50, 0 80 Z" fill="#f3f4f6" />
         {/* Navy Wave */}
-        <Path d="M 0 0 L 595 0 L 595 72 C 450 95, 220 45, 0 82 Z" fill="#1b2536" />
+        <Path d="M 0 0 L 595 0 L 595 58 C 450 78, 220 36, 0 68 Z" fill="#1b2536" />
         {/* Blue Wave */}
-        <Path d="M 0 0 L 260 0 C 230 60, 120 90, 0 90 Z" fill="#0e57c2" />
+        <Path d="M 0 0 L 260 0 C 230 48, 120 72, 0 72 Z" fill="#0e57c2" />
       </Svg>
       <Text style={styles.headerInvoiceText}>INVOICE</Text>
       <Text style={styles.headerBrandText}>BAROKAH JAYA ABADI</Text>
@@ -521,7 +529,7 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
 
             {/* Content Wrapper (Padded) */}
             <View style={styles.contentWrapper}>
-              {/* Top Row: Invoice Metadata vs. Logo/Company Info (Swapped for Right-side Logo) */}
+              {/* Top Row: Invoice Metadata vs. Logo/Company Info */}
               <View style={styles.bodyHeaderRow}>
                 {/* Left Column: Invoice Meta */}
                 <View style={styles.bodyHeaderLeft}>
@@ -571,8 +579,8 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
                 <View style={styles.detailsColumnLeft}>
                   <Text style={styles.columnTitle}>DITERBITKAN KEPADA</Text>
                   <Text style={styles.columnTextBold}>PT. WANNA MULIA SEJAHTERA</Text>
-                  {/* <Text style={styles.columnText}>Kecamatan Cileungsi</Text>
-                  <Text style={styles.columnText}>Kabupaten Bogor, Jawa Barat</Text> */}
+                  <Text style={styles.columnText}>Kecamatan Cileungsi</Text>
+                  <Text style={styles.columnText}>Kabupaten Bogor, Jawa Barat</Text>
                 </View>
 
                 {/* Right Column: Payment Info */}
@@ -617,87 +625,97 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
                 ))}
               </View>
 
-              {/* Calculations Box */}
-              <View style={styles.calcContainer}>
-                <View style={styles.calcBox}>
-                  <View style={styles.calcRow}>
-                    <Text style={styles.calcLabel}>Jumlah Kubikasi :</Text>
-                    <Text style={styles.calcValueBold}>{formatNumberPdf(plantInfo.totalKubikasi, 3)} m³</Text>
+              {/* Bottom Section: Calculations, Summary & Signature side-by-side */}
+              <View style={styles.bottomSection} wrap={false}>
+                {/* Left Column: Grand Summary (if last page) */}
+                {isLastPage && (!plantId || isLastPlantOverall) ? (
+                  <View style={styles.bottomLeftCol}>
+                    <View style={styles.summaryContainer}>
+                      <Text style={styles.summaryTitle}>RINGKASAN REKAP PLANT</Text>
+                      <View style={styles.summaryDivider} />
+                      {Object.keys(invoice.subtotalPlant).map((pid) => {
+                        const p = invoice.subtotalPlant[pid];
+                        const label = `${p.plantNama.replace("Plant ", "")} ${p.jenisBarang ? `- ${p.jenisBarang}` : ""}`;
+                        return (
+                          <View key={pid} style={styles.summaryRow}>
+                            <Text style={styles.summaryLabel}>{label}</Text>
+                            <Text style={styles.summaryValue}>{formatRpPdf(p.subtotal)}</Text>
+                          </View>
+                        );
+                      })}
+
+                      {/* Additional costs detailing */}
+                      {invoice.biayaTambahanDetail && invoice.biayaTambahanDetail.length > 0 ? (
+                        invoice.biayaTambahanDetail.map((cost) => (
+                          cost.nominal > 0 && (
+                            <View key={cost.nama} style={styles.summaryRow}>
+                              <Text style={styles.summaryLabel}>{cost.nama}</Text>
+                              <Text style={styles.summaryValue}>{formatRpPdf(cost.nominal)}</Text>
+                            </View>
+                          )
+                        ))
+                      ) : (
+                        invoice.biayaTambahan > 0 && (
+                          <View style={styles.summaryRow}>
+                            <Text style={styles.summaryLabel}>Biaya Tambahan</Text>
+                            <Text style={styles.summaryValue}>{formatRpPdf(invoice.biayaTambahan)}</Text>
+                          </View>
+                        )
+                      )}
+
+                      <View style={styles.summaryDivider} />
+                      <View style={styles.summaryRowTotal}>
+                        <Text style={styles.summaryLabelTotal}>JUMLAH TOTAL</Text>
+                        <Text style={styles.summaryValueTotal}>{formatRpPdf(invoice.grandTotal)}</Text>
+                      </View>
+                    </View>
                   </View>
-                  <View style={styles.calcRow}>
-                    <Text style={styles.calcLabel}>Jumlah {plantInfo.jenisBarang || "Split"} :</Text>
-                    <Text style={styles.calcValue}>
-                      {formatNumberPdf(plantInfo.totalKubikasi, 3)} x {formatNumberPdf(plantInfo.hargaPerM3, 0)}
+                ) : (
+                  <View style={styles.bottomLeftCol} />
+                )}
+
+                {/* Right Column: Calculations & Signature */}
+                <View style={styles.bottomRightCol}>
+                  <View style={styles.calcBox}>
+                    <View style={styles.calcRow}>
+                      <Text style={styles.calcLabel}>Jumlah Kubikasi :</Text>
+                      <Text style={styles.calcValueBold}>{formatNumberPdf(plantInfo.totalKubikasi, 3)} m³</Text>
+                    </View>
+                    <View style={styles.calcRow}>
+                      <Text style={styles.calcLabel}>Jumlah {plantInfo.jenisBarang || "Split"} :</Text>
+                      <Text style={styles.calcValue}>
+                        {formatNumberPdf(plantInfo.totalKubikasi, 3)} x {formatNumberPdf(plantInfo.hargaPerM3, 0)}
+                      </Text>
+                    </View>
+                    <View style={styles.calcRowTotal}>
+                      <Text style={styles.calcLabelTotal}>Sub Total :</Text>
+                      <Text style={styles.calcValueTotal}>{formatRpPdf(plantInfo.subtotal)}</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.signatureContainer}>
+                    <View style={{ height: 25 }} />
+                    <Text style={styles.signatureLabel}>H. SUPANDI</Text>
+                    <Text style={{ fontSize: 6.5, color: "#64748b", marginTop: 1, textAlign: "center" }}>
+                      Tanda Tangan Otorisasi
                     </Text>
                   </View>
-                  <View style={styles.calcRowTotal}>
-                    <Text style={styles.calcLabelTotal}>Sub Total :</Text>
-                    <Text style={styles.calcValueTotal}>{formatRpPdf(plantInfo.subtotal)}</Text>
-                  </View>
-                </View>
-              </View>
-
-              {/* Grand Summary Block on the Last Page */}
-              {isLastPage && (!plantId || isLastPlantOverall) && (
-                <View style={styles.summaryContainer}>
-                  <Text style={styles.summaryTitle}>RINGKASAN REKAP PLANT</Text>
-                  <View style={styles.summaryDivider} />
-                  {Object.keys(invoice.subtotalPlant).map((pid) => {
-                    const p = invoice.subtotalPlant[pid];
-                    const label = `${p.plantNama.replace("Plant ", "")} ${p.jenisBarang ? `- ${p.jenisBarang}` : ""}`;
-                    return (
-                      <View key={pid} style={styles.summaryRow}>
-                        <Text style={styles.summaryLabel}>{label}</Text>
-                        <Text style={styles.summaryValue}>{formatRpPdf(p.subtotal)}</Text>
-                      </View>
-                    );
-                  })}
-
-                  {/* Additional costs detailing */}
-                  {invoice.biayaTambahanDetail && invoice.biayaTambahanDetail.length > 0 ? (
-                    invoice.biayaTambahanDetail.map((cost) => (
-                      cost.nominal > 0 && (
-                        <View key={cost.nama} style={styles.summaryRow}>
-                          <Text style={styles.summaryLabel}>{cost.nama}</Text>
-                          <Text style={styles.summaryValue}>{formatRpPdf(cost.nominal)}</Text>
-                        </View>
-                      )
-                    ))
-                  ) : (
-                    invoice.biayaTambahan > 0 && (
-                      <View style={styles.summaryRow}>
-                        <Text style={styles.summaryLabel}>Biaya Tambahan</Text>
-                        <Text style={styles.summaryValue}>{formatRpPdf(invoice.biayaTambahan)}</Text>
-                      </View>
-                    )
-                  )}
-
-                  <View style={styles.summaryDivider} />
-                  <View style={styles.summaryRowTotal}>
-                    <Text style={styles.summaryLabelTotal}>JUMLAH TOTAL</Text>
-                    <Text style={styles.summaryValueTotal}>{formatRpPdf(invoice.grandTotal)}</Text>
-                  </View>
-                </View>
-              )}
-
-              {/* Page Footer Section */}
-              <View style={styles.footerRow}>
-                <View style={styles.signatureContainer}>
-                  <View style={{ height: 35 }} />
-                  <Text style={styles.signatureLabel}>H. SUPANDI</Text>
-                  {/* <Text style={{ fontSize: 15, color: "#d5e2f3ff", marginTop: 1 }}>
-                    Signature
-                  </Text> */}
                 </View>
               </View>
             </View>
 
             {/* Absolute Wavy Footer (Full bleed) */}
-            <View style={styles.footerContainer}>
+            <View style={styles.footerContainer} fixed>
               <Svg style={styles.footerSvg} viewBox="0 0 595 60">
                 <Path d="M 0 60 L 595 60 L 595 15 C 450 45, 200 -5, 0 20 Z" fill="#1b2536" />
                 <Path d="M 0 60 L 320 60 C 240 38, 120 20, 0 47 Z" fill="#0e57c2" />
               </Svg>
+              {/* <View style={styles.footerTextSection}>
+                <Text style={styles.footerLabel}>HUBUNGI KAMI :</Text>
+                <Text style={styles.footerValue}>{c.noHp}</Text>
+                <Text style={[styles.footerLabel, { marginLeft: 15 }]}>ALAMAT :</Text>
+                <Text style={styles.footerValue}>Desa Situsari, Cileungsi, Bogor</Text>
+              </View> */}
             </View>
           </Page>
         );
