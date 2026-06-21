@@ -396,7 +396,7 @@ export default function CreateInvoicePage() {
                     className="form-input"
                     value={cost.nominal}
                     onChange={(e) => {
-                      const val = Math.max(0, Number(e.target.value));
+                      const val = Number(e.target.value);
                       setAdditionalCosts((prev) => {
                         const next = [...prev];
                         next[idx] = { ...next[idx], nominal: val };
@@ -567,10 +567,12 @@ export default function CreateInvoicePage() {
                   </div>
                   {additionalCosts.map(
                     (cost) =>
-                      cost.nominal > 0 && (
+                      cost.nominal !== 0 && (
                         <div key={cost.id} className="flex justify-between text-xs">
-                          <span style={{ color: "rgba(255,255,255,0.45)" }}>+ {cost.nama}</span>
-                          <span className="font-medium">{formatRupiah(cost.nominal)}</span>
+                          <span style={{ color: "rgba(255,255,255,0.45)" }}>
+                            {cost.nominal > 0 ? `+ ${cost.nama}` : `– ${cost.nama}`}
+                          </span>
+                          <span className="font-medium">{formatRupiah(Math.abs(cost.nominal))}</span>
                         </div>
                       )
                   )}

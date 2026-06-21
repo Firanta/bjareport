@@ -42,13 +42,14 @@ function formatDateExcel(dateStr: string): string {
   }
 }
 
-// Currency format matching Excel style (using en-US style commas/dots)
 function formatRpPdf(val: number): string {
+  const isNegative = val < 0;
+  const absVal = Math.abs(val);
   const formatted = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(val);
-  return `Rp ${formatted}`;
+  }).format(absVal);
+  return isNegative ? `-Rp ${formatted}` : `Rp ${formatted}`;
 }
 
 // Number format helper
@@ -651,7 +652,7 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
                       {/* Additional costs detailing */}
                       {invoice.biayaTambahanDetail && invoice.biayaTambahanDetail.length > 0 ? (
                         invoice.biayaTambahanDetail.map((cost) => (
-                          cost.nominal > 0 && (
+                          cost.nominal !== 0 && (
                             <View key={cost.nama} style={styles.summaryRow}>
                               <Text style={styles.summaryLabel}>{cost.nama}</Text>
                               <Text style={styles.summaryValue}>{formatRpPdf(cost.nominal)}</Text>
@@ -659,7 +660,7 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
                           )
                         ))
                       ) : (
-                        invoice.biayaTambahan > 0 && (
+                        invoice.biayaTambahan !== 0 && (
                           <View style={styles.summaryRow}>
                             <Text style={styles.summaryLabel}>Biaya Tambahan</Text>
                             <Text style={styles.summaryValue}>{formatRpPdf(invoice.biayaTambahan)}</Text>
