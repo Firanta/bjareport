@@ -651,14 +651,20 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
 
                       {/* Additional costs detailing */}
                       {invoice.biayaTambahanDetail && invoice.biayaTambahanDetail.length > 0 ? (
-                        invoice.biayaTambahanDetail.map((cost) => (
-                          cost.nominal !== 0 && (
-                            <View key={cost.nama} style={styles.summaryRow}>
-                              <Text style={styles.summaryLabel}>{cost.nama}</Text>
-                              <Text style={styles.summaryValue}>{formatRpPdf(cost.nominal)}</Text>
-                            </View>
-                          )
-                        ))
+                        [...invoice.biayaTambahanDetail]
+                          .sort((a, b) => {
+                            if (a.nominal >= 0 && b.nominal < 0) return -1;
+                            if (a.nominal < 0 && b.nominal >= 0) return 1;
+                            return 0;
+                          })
+                          .map((cost) => (
+                            cost.nominal !== 0 && (
+                              <View key={cost.nama} style={styles.summaryRow}>
+                                <Text style={styles.summaryLabel}>{cost.nama}</Text>
+                                <Text style={styles.summaryValue}>{formatRpPdf(cost.nominal)}</Text>
+                              </View>
+                            )
+                          ))
                       ) : (
                         invoice.biayaTambahan !== 0 && (
                           <View style={styles.summaryRow}>

@@ -121,8 +121,8 @@ export function TripForm({ defaultValues, tripId, mode }: TripFormProps) {
   const today = new Date().toISOString().split("T")[0];
 
   const selectedPlantObj = plants.find(p => p.id === selectedPlantId);
-  const availableItems = selectedPlantObj?.items && selectedPlantObj.items.length > 0 
-    ? selectedPlantObj.items 
+  const availableItems = selectedPlantObj?.items && selectedPlantObj.items.length > 0
+    ? selectedPlantObj.items
     : [{ id: "default-split", nama: "Split", hargaPerM3: selectedPlantObj?.hargaPerM3 || 0 }];
 
   return (

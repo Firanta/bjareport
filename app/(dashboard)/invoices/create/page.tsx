@@ -226,6 +226,15 @@ export default function CreateInvoicePage() {
       // Auto numbering prefix INV-YYYY-MM
       const nomorInvoice = await getNextInvoiceNumber(bulan, tahun);
 
+      const sortedDetails = [...additionalCosts]
+        .filter((c) => c.nominal !== 0)
+        .sort((a, b) => {
+          if (a.nominal >= 0 && b.nominal < 0) return -1;
+          if (a.nominal < 0 && b.nominal >= 0) return 1;
+          return 0;
+        })
+        .map(({ nama, nominal }) => ({ nama, nominal }));
+
       const invoiceData = {
         nomorInvoice,
         bulan,
@@ -236,7 +245,7 @@ export default function CreateInvoicePage() {
         totalKubikasi,
         subtotalPlant,
         biayaTambahan: totalAdditional,
-        biayaTambahanDetail: additionalCosts.map(({ nama, nominal }) => ({ nama, nominal })),
+        biayaTambahanDetail: sortedDetails,
         grandTotal,
         pdfUrl: "", // Cloudinary URL updated below
       };
@@ -565,17 +574,23 @@ export default function CreateInvoicePage() {
                     <span style={{ color: "rgba(255,255,255,0.45)" }}>Total Kubikasi</span>
                     <span className="font-semibold">{formatNumber(totalKubikasi, 3)} m³</span>
                   </div>
-                  {additionalCosts.map(
-                    (cost) =>
-                      cost.nominal !== 0 && (
-                        <div key={cost.id} className="flex justify-between text-xs">
-                          <span style={{ color: "rgba(255,255,255,0.45)" }}>
-                            {cost.nominal > 0 ? `+ ${cost.nama}` : `– ${cost.nama}`}
-                          </span>
-                          <span className="font-medium">{formatRupiah(Math.abs(cost.nominal))}</span>
-                        </div>
-                      )
-                  )}
+                  {[...additionalCosts]
+                    .sort((a, b) => {
+                      if (a.nominal >= 0 && b.nominal < 0) return -1;
+                      if (a.nominal < 0 && b.nominal >= 0) return 1;
+                      return 0;
+                    })
+                    .map(
+                      (cost) =>
+                        cost.nominal !== 0 && (
+                          <div key={cost.id} className="flex justify-between text-xs">
+                            <span style={{ color: "rgba(255,255,255,0.45)" }}>
+                              {cost.nominal > 0 ? `+ ${cost.nama}` : `– ${cost.nama}`}
+                            </span>
+                            <span className="font-medium">{formatRupiah(Math.abs(cost.nominal))}</span>
+                          </div>
+                        )
+                    )}
 
                   {/* Grand total bar */}
                   <div
