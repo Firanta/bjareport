@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
   signatureContainer: {
     width: 130,
     alignItems: "center",
-    marginTop: 5,
+    marginTop: 15,
   },
   signatureLabel: {
     fontSize: 8,
@@ -705,11 +705,8 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
                   </View>
 
                   <View style={styles.signatureContainer}>
-                    <View style={{ height: 25 }} />
+                    <View style={{ height: 50 }} />
                     <Text style={styles.signatureLabel}>H. SUPANDI</Text>
-                    <Text style={{ fontSize: 6.5, color: "#64748b", marginTop: 1, textAlign: "center" }}>
-                      Tanda Tangan Otorisasi
-                    </Text>
                   </View>
                 </View>
               </View>
