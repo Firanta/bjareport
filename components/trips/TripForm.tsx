@@ -24,7 +24,15 @@ const schema = z.object({
   plantId: z.string().min(1, "Plant wajib dipilih"),
   plantNama: z.string(),
   kubikasi: z.preprocess((v) => Number(v), z.number().positive("Kubikasi harus > 0")),
-  tonaseKuari: z.preprocess((v) => Number(v), z.number().positive("Tonase Kuari harus > 0")),
+  // tonaseKuari is optional — empty/null/NaN → saved as 0, shown as "-" in invoice
+  tonaseKuari: z.preprocess(
+    (v) => {
+      if (v === "" || v === null || v === undefined) return 0;
+      const n = Number(v);
+      return isNaN(n) ? 0 : n;
+    },
+    z.number().min(0)
+  ),
   // tonasePlan is optional — empty/null/NaN → saved as 0, shown as "-" in invoice
   tonasePlan: z.preprocess(
     (v) => {
@@ -269,16 +277,19 @@ export function TripForm({ defaultValues, tripId, mode }: TripFormProps) {
           {/* Tonase Kuari */}
           <div className="form-group">
             <label className="form-label" htmlFor="tonaseKuari">
-              Tonase Kuari (ton) *
+              Tonase Kuari (ton)
             </label>
             <input
               id="tonaseKuari"
               type="number"
               step="any"
               className={`form-input ${errors.tonaseKuari ? "error" : ""}`}
-              placeholder="Contoh: 26.2"
+              placeholder="Kosongkan jika tidak ada"
               {...register("tonaseKuari")}
             />
+            <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+              Opsional — kosongkan jika tidak ada NETTO
+            </p>
             {errors.tonaseKuari && (
               <p className="form-error">{errors.tonaseKuari.message}</p>
             )}

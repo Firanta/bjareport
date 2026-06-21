@@ -612,7 +612,11 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
                     <Text style={[styles.td, { width: "15%", textAlign: "center" }]}>{t.noPolisi}</Text>
                     <Text style={[styles.td, { width: "15%", textAlign: "center" }]}>{t.noSuratJalan}</Text>
                     <Text style={[styles.td, { width: "13%", textAlign: "center" }]}>{t.jenisBarang}</Text>
-                    <Text style={[styles.td, { width: "13%", textAlign: "right" }]}>{formatNumberPdf(t.tonaseKuari ?? 0, 2)}</Text>
+                    <Text style={[styles.td, { width: "13%", textAlign: "right" }]}>
+                      {t.tonaseKuari !== null && t.tonaseKuari !== undefined && Number(t.tonaseKuari) !== 0 && !isNaN(Number(t.tonaseKuari))
+                        ? formatNumberPdf(Number(t.tonaseKuari), 2)
+                        : "-"}
+                    </Text>
                     <Text style={[styles.td, { width: "13%", textAlign: "right" }]}>
                       {t.tonasePlan !== null && t.tonasePlan !== undefined && Number(t.tonasePlan) !== 0 && !isNaN(Number(t.tonasePlan))
                         ? formatNumberPdf(Number(t.tonasePlan), 3)

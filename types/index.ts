@@ -43,7 +43,7 @@ export interface Trip {
   plantNama: string;
   jenisBarang: string;       // default: "Split"
   kubikasi: number;
-  tonaseKuari: number;
+  tonaseKuari?: number;          // optional — 0 or undefined shows "-" in invoice
   tonasePlan?: number;           // optional — 0 or undefined shows "-" in invoice
   fotoSuratJalan: string;    // Cloudinary URL
   createdAt: Timestamp;
