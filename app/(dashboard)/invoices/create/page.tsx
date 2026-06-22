@@ -171,7 +171,7 @@ export default function CreateInvoicePage() {
     setAdditionalCosts((prev) => {
       const ktIndex = prev.findIndex((c) => c.nama.toLowerCase().includes("karang taruna"));
       const calculatedNominal = selectedTripIds.size * 100000;
-      
+
       if (ktIndex !== -1) {
         if (prev[ktIndex].nominal !== calculatedNominal) {
           const next = [...prev];
@@ -196,11 +196,11 @@ export default function CreateInvoicePage() {
 
   const { subtotalPlant, totalKubikasi, grandTotal } = useMemo(() => {
     return calculateInvoiceTotals(
-      selectedTrips.map((t) => ({ 
-        plantId: t.plantId, 
-        plantNama: t.plantNama, 
-        jenisBarang: t.jenisBarang, 
-        kubikasi: t.kubikasi 
+      selectedTrips.map((t) => ({
+        plantId: t.plantId,
+        plantNama: t.plantNama,
+        jenisBarang: t.jenisBarang,
+        kubikasi: t.kubikasi
       })),
       plantsForCalc,
       totalAdditional

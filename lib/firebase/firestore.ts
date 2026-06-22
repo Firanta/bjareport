@@ -213,7 +213,7 @@ export async function getNextInvoiceNumber(
 ): Promise<string> {
   const prefix = `INV-${tahun}-${String(bulan).padStart(2, "0")}`;
   const snap = await getDocs(collection(getFirebaseDb(), INVOICES));
-  
+
   const invoiceNums = snap.docs
     .map((d) => d.data().nomorInvoice as string)
     .filter((num) => num && num.startsWith(prefix));
