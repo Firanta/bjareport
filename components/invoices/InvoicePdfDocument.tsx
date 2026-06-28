@@ -949,13 +949,8 @@ export function InvoicePdfDocument({
                         <Text style={styles.summaryValueTotal}>{formatRpPdf(invoice.grandTotal)}</Text>
                       </View>
                     </View>
-
-                    {/* TOTAL KESELURUHAN di bawah ringkasan */}
-                    <View style={[styles.grandTotalBox, { marginTop: 6 }]}>
-                      <Text style={styles.grandTotalLabel}>TOTAL KESELURUHAN</Text>
-                      <Text style={styles.grandTotalValue}>{formatRpPdf(invoice.grandTotal)}</Text>
-                    </View>
                   </View>
+
                 ) : (
                   <View style={styles.bottomLeftCol} />
                 )}
