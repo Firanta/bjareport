@@ -51,6 +51,7 @@ export default function CreateInvoicePage() {
   // States
   const [selectedTripIds, setSelectedTripIds] = useState<Set<string>>(new Set());
   const [additionalCosts, setAdditionalCosts] = useState<{ id: string; nama: string; nominal: number }[]>([]);
+  const [includeKarangTaruna, setIncludeKarangTaruna] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [generatedInvoice, setGeneratedInvoice] = useState<{
     id: string;
@@ -168,22 +169,45 @@ export default function CreateInvoicePage() {
 
   // Auto-calculate Karang Taruna (Rp 100,000 per surat jalan)
   useEffect(() => {
+    if (!includeKarangTaruna) {
+      setAdditionalCosts((prev) => {
+        const ktIndex = prev.findIndex((c) => c.nama.toLowerCase().includes("karang taruna"));
+        if (ktIndex !== -1) {
+          const next = [...prev];
+          let updated = false;
+          if (next[ktIndex].nominal !== 0) {
+            next[ktIndex].nominal = 0;
+            updated = true;
+          }
+          if (next[ktIndex].nama !== "Karang Taruna") {
+            next[ktIndex].nama = "Karang Taruna";
+            updated = true;
+          }
+          if (updated) return next;
+        }
+        return prev;
+      });
+      return;
+    }
+
     setAdditionalCosts((prev) => {
       const ktIndex = prev.findIndex((c) => c.nama.toLowerCase().includes("karang taruna"));
       const calculatedNominal = selectedTripIds.size * 100000;
+      const tripCount = selectedTripIds.size;
+      const displayNama = `Karang Taruna (${tripCount} trip)`;
 
       if (ktIndex !== -1) {
-        if (prev[ktIndex].nominal !== calculatedNominal) {
+        if (prev[ktIndex].nominal !== calculatedNominal || prev[ktIndex].nama !== displayNama) {
           const next = [...prev];
-          next[ktIndex] = { ...next[ktIndex], nominal: calculatedNominal };
+          next[ktIndex] = { ...next[ktIndex], nama: displayNama, nominal: calculatedNominal };
           return next;
         }
       } else if (calculatedNominal > 0) {
-        return [...prev, { id: "karang-taruna-auto", nama: "Karang Taruna", nominal: calculatedNominal }];
+        return [...prev, { id: "karang-taruna-auto", nama: displayNama, nominal: calculatedNominal }];
       }
       return prev;
     });
-  }, [selectedTripIds.size]);
+  }, [selectedTripIds.size, includeKarangTaruna]);
 
   const totalAdditional = useMemo(() => {
     return additionalCosts.reduce((sum, c) => sum + c.nominal, 0);
@@ -393,29 +417,52 @@ export default function CreateInvoicePage() {
               2. Biaya Tambahan (Rp)
             </h2>
             <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
-              Sesuaikan nominal biaya operasional atau potongan Karang Taruna jika ada.
+              Sesuaikan nominal biaya operasional atau Karang Taruna jika ada.
             </p>
 
             <div className="space-y-3">
-              {additionalCosts.map((cost, idx) => (
-                <div key={cost.id} className="form-group">
-                  <label className="form-label">{cost.nama}</label>
-                  <input
-                    type="number"
-                    className="form-input"
-                    value={cost.nominal}
-                    onChange={(e) => {
-                      const val = Number(e.target.value);
-                      setAdditionalCosts((prev) => {
-                        const next = [...prev];
-                        next[idx] = { ...next[idx], nominal: val };
-                        return next;
-                      });
-                      setGeneratedInvoice(null);
-                    }}
-                  />
-                </div>
-              ))}
+              {additionalCosts.map((cost, idx) => {
+                const isKarangTaruna = cost.nama.toLowerCase().includes("karang taruna");
+                return (
+                  <div key={cost.id} className="form-group">
+                    {isKarangTaruna ? (
+                      <div className="flex items-center justify-between">
+                        <label className="form-label mb-0">{cost.nama}</label>
+                        <label className="flex items-center gap-1.5 text-xs cursor-pointer select-none" style={{ color: "rgba(255,255,255,0.5)" }}>
+                          <input
+                            type="checkbox"
+                            className="custom-checkbox"
+                            checked={includeKarangTaruna}
+                            onChange={(e) => {
+                              setIncludeKarangTaruna(e.target.checked);
+                              setGeneratedInvoice(null);
+                            }}
+                          />
+                          Sertakan
+                        </label>
+                      </div>
+                    ) : (
+                      <label className="form-label">{cost.nama}</label>
+                    )}
+                    <input
+                      type="number"
+                      className="form-input"
+                      value={cost.nominal}
+                      disabled={isKarangTaruna && !includeKarangTaruna}
+                      style={isKarangTaruna && !includeKarangTaruna ? { opacity: 0.4, cursor: "not-allowed" } : undefined}
+                      onChange={(e) => {
+                        const val = Number(e.target.value);
+                        setAdditionalCosts((prev) => {
+                          const next = [...prev];
+                          next[idx] = { ...next[idx], nominal: val };
+                          return next;
+                        });
+                        setGeneratedInvoice(null);
+                      }}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

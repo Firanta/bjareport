@@ -274,27 +274,6 @@ export function TripForm({ defaultValues, tripId, mode }: TripFormProps) {
             )}
           </div>
 
-          {/* Tonase Kuari */}
-          <div className="form-group">
-            <label className="form-label" htmlFor="tonaseKuari">
-              Tonase Kuari (ton)
-            </label>
-            <input
-              id="tonaseKuari"
-              type="number"
-              step="any"
-              className={`form-input ${errors.tonaseKuari ? "error" : ""}`}
-              placeholder="Kosongkan jika tidak ada"
-              {...register("tonaseKuari")}
-            />
-            <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
-              Opsional — kosongkan jika tidak ada NETTO
-            </p>
-            {errors.tonaseKuari && (
-              <p className="form-error">{errors.tonaseKuari.message}</p>
-            )}
-          </div>
-
           {/* Tonase Plan */}
           <div className="form-group">
             <label className="form-label" htmlFor="tonasePlan">
@@ -313,6 +292,27 @@ export function TripForm({ defaultValues, tripId, mode }: TripFormProps) {
             </p>
             {errors.tonasePlan && (
               <p className="form-error">{errors.tonasePlan.message}</p>
+            )}
+          </div>
+
+          {/* Tonase Kuari */}
+          <div className="form-group">
+            <label className="form-label" htmlFor="tonaseKuari">
+              Tonase Kuari (ton)
+            </label>
+            <input
+              id="tonaseKuari"
+              type="number"
+              step="any"
+              className={`form-input ${errors.tonaseKuari ? "error" : ""}`}
+              placeholder="Kosongkan jika tidak ada"
+              {...register("tonaseKuari")}
+            />
+            <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+              Opsional — kosongkan jika tidak ada NETTO
+            </p>
+            {errors.tonaseKuari && (
+              <p className="form-error">{errors.tonaseKuari.message}</p>
             )}
           </div>
         </div>

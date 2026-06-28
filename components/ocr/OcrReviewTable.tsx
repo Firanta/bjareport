@@ -73,8 +73,8 @@ export function OcrReviewTable({
               <th>No SJ</th>
               <th>No Polisi</th>
               <th>Kubikasi</th>
-              <th>Ton Kuari</th>
               <th>Ton Plan</th>
+              <th>Ton Kuari</th>
               <th>Tanggal</th>
               <th>Plant</th>
               <th>Barang</th>
@@ -167,29 +167,6 @@ export function OcrReviewTable({
                     )}
                   </td>
 
-                  {/* Ton Kuari (NETTO) */}
-                  <td>
-                    {isEditing ? (
-                      <input
-                        className="form-input"
-                        type="number"
-                        step="any"
-                        style={{ width: 80 }}
-                        value={item.tonaseKuari || ""}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          onUpdate(item.tempId, { tonaseKuari: val === "" ? null : parseFloat(val) });
-                        }}
-                      />
-                    ) : (
-                      <span>
-                        {item.tonaseKuari !== null && item.tonaseKuari !== undefined && item.tonaseKuari !== 0
-                          ? `${item.tonaseKuari} t`
-                          : "—"}
-                      </span>
-                    )}
-                  </td>
-
                   {/* Ton Plan (TIMBANGAN NET) */}
                   <td>
                     {isEditing ? (
@@ -208,6 +185,29 @@ export function OcrReviewTable({
                       <span>
                         {item.tonasePlan !== null && item.tonasePlan !== undefined && item.tonasePlan !== 0
                           ? `${item.tonasePlan} t`
+                          : "—"}
+                      </span>
+                    )}
+                  </td>
+
+                  {/* Ton Kuari (NETTO) */}
+                  <td>
+                    {isEditing ? (
+                      <input
+                        className="form-input"
+                        type="number"
+                        step="any"
+                        style={{ width: 80 }}
+                        value={item.tonaseKuari || ""}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          onUpdate(item.tempId, { tonaseKuari: val === "" ? null : parseFloat(val) });
+                        }}
+                      />
+                    ) : (
+                      <span>
+                        {item.tonaseKuari !== null && item.tonaseKuari !== undefined && item.tonaseKuari !== 0
+                          ? `${item.tonaseKuari} t`
                           : "—"}
                       </span>
                     )}
