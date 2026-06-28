@@ -45,16 +45,16 @@ function formatDateExcel(dateStr: string): string {
 function formatRpPdf(val: number): string {
   const isNegative = val < 0;
   const absVal = Math.abs(val);
-  const formatted = new Intl.NumberFormat("en-US", {
+  const formatted = new Intl.NumberFormat("id-ID", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(absVal);
-  return isNegative ? `-Rp ${formatted}` : `Rp ${formatted}`;
+  return isNegative ? `-Rp${formatted}` : `Rp${formatted}`;
 }
 
 // Number format helper
 function formatNumberPdf(val: number, decimals = 3): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("id-ID", {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   }).format(val);
