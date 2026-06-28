@@ -274,14 +274,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8fafc", // Alternating rows
   },
   th: {
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: "Helvetica-Bold",
     color: "#ffffff",
     textAlign: "center",
     paddingHorizontal: 2,
   },
   td: {
-    fontSize: 13,
+    fontSize: 12,
     color: "#334155",
     paddingHorizontal: 2,
   },
@@ -305,20 +305,20 @@ const styles = StyleSheet.create({
   },
   calcLabel: {
     fontFamily: "Helvetica",
-    fontSize: 10,
+    fontSize: 12,
     color: "#475569",
     width: "55%",
   },
   calcValue: {
     fontFamily: "Helvetica",
-    fontSize: 10,
+    fontSize: 12,
     textAlign: "right",
     width: "45%",
     color: "#0f172a",
   },
   calcValueBold: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 10,
+    fontSize: 12,
     textAlign: "right",
     width: "45%",
     color: "#0f172a",
@@ -334,12 +334,12 @@ const styles = StyleSheet.create({
   },
   calcLabelTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 11,
+    fontSize: 12,
     color: "#ffffff",
   },
   calcValueTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 11,
+    fontSize: 12,
     textAlign: "right",
     color: "#ffffff",
   },
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   summaryTitle: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: "Helvetica-Bold",
     color: "#0f172a",
     marginBottom: 3,
@@ -365,12 +365,12 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   summaryLabel: {
-    fontSize: 10,
+    fontSize: 12,
     color: "#475569",
   },
   summaryValue: {
     fontFamily: "Helvetica",
-    fontSize: 10,
+    fontSize: 12,
     textAlign: "right",
     color: "#0f172a",
   },
@@ -390,12 +390,12 @@ const styles = StyleSheet.create({
   },
   summaryLabelTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 11.5,
+    fontSize: 12,
     color: "#ffffff",
   },
   summaryValueTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 11.5,
+    fontSize: 12,
     textAlign: "right",
     color: "#ffffff",
   },
