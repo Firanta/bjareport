@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#1b2536", // Dark navy header
     alignItems: "center",
-    paddingVertical: 7,
+    paddingVertical: 9,
     borderRadius: 3,
   },
   tableRow: {
@@ -268,20 +268,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: "#cbd5e1",
     alignItems: "center",
-    paddingVertical: 5,
+    paddingVertical: 7,
   },
   tableRowEven: {
     backgroundColor: "#f8fafc", // Alternating rows
   },
   th: {
-    fontSize: 9.5,
+    fontSize: 13,
     fontFamily: "Helvetica-Bold",
     color: "#ffffff",
     textAlign: "center",
     paddingHorizontal: 2,
   },
   td: {
-    fontSize: 9.5,
+    fontSize: 13,
     color: "#334155",
     paddingHorizontal: 2,
   },
@@ -596,23 +596,23 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
               {/* Trips Table */}
               <View style={styles.table}>
                 <View style={styles.tableHeader}>
-                  <Text style={[styles.th, { width: "5%" }]}>NO</Text>
-                  <Text style={[styles.th, { width: "12%" }]}>TANGGAL</Text>
-                  <Text style={[styles.th, { width: "15%" }]}>NO. POLISI</Text>
-                  <Text style={[styles.th, { width: "15%" }]}>NO. SRT JLN</Text>
-                  <Text style={[styles.th, { width: "13%" }]}>JENIS</Text>
+                  <Text style={[styles.th, { width: "4%" }]}>NO</Text>
+                  <Text style={[styles.th, { width: "15%" }]}>TANGGAL</Text>
+                  <Text style={[styles.th, { width: "17%" }]}>NO. POLISI</Text>
+                  <Text style={[styles.th, { width: "14%" }]}>NO. SRT JLN</Text>
+                  <Text style={[styles.th, { width: "11%" }]}>JENIS</Text>
                   <Text style={[styles.th, { width: "13%" }]}>TON KUARI</Text>
                   <Text style={[styles.th, { width: "13%" }]}>TON PLAN</Text>
-                  <Text style={[styles.th, { width: "14%" }]}>KUBIKASI</Text>
+                  <Text style={[styles.th, { width: "13%" }]}>KUBIKASI</Text>
                 </View>
 
                 {plantTrips.map((t, i) => (
                   <View key={t.id} style={[styles.tableRow, i % 2 === 1 ? styles.tableRowEven : {}]}>
-                    <Text style={[styles.td, { width: "5%", textAlign: "center" }]}>{i + 1}</Text>
-                    <Text style={[styles.td, { width: "12%", textAlign: "center" }]}>{formatDateExcel(t.tanggal)}</Text>
-                    <Text style={[styles.td, { width: "15%", textAlign: "center" }]}>{t.noPolisi}</Text>
-                    <Text style={[styles.td, { width: "15%", textAlign: "center" }]}>{t.noSuratJalan}</Text>
-                    <Text style={[styles.td, { width: "13%", textAlign: "center" }]}>{t.jenisBarang}</Text>
+                    <Text style={[styles.td, { width: "4%", textAlign: "center" }]}>{i + 1}</Text>
+                    <Text style={[styles.td, { width: "15%", textAlign: "center" }]}>{formatDateExcel(t.tanggal)}</Text>
+                    <Text style={[styles.td, { width: "17%", textAlign: "center" }]}>{t.noPolisi}</Text>
+                    <Text style={[styles.td, { width: "14%", textAlign: "center" }]}>{t.noSuratJalan}</Text>
+                    <Text style={[styles.td, { width: "11%", textAlign: "center" }]}>{t.jenisBarang}</Text>
                     <Text style={[styles.td, { width: "13%", textAlign: "center" }]}>
                       {t.tonaseKuari !== null && t.tonaseKuari !== undefined && Number(t.tonaseKuari) !== 0 && !isNaN(Number(t.tonaseKuari))
                         ? formatNumberPdf(Number(t.tonaseKuari), 2)
@@ -623,7 +623,7 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
                         ? formatNumberPdf(Number(t.tonasePlan), 3)
                         : "-"}
                     </Text>
-                    <Text style={[styles.td, { width: "14%", textAlign: "center" }]}>
+                    <Text style={[styles.td, { width: "13%", textAlign: "center" }]}>
                       {formatNumberPdf(t.kubikasi ?? 0, 2)}
                     </Text>
                   </View>
