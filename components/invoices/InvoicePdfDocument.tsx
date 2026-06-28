@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1b2536", // Dark navy header
     alignItems: "center",
     paddingVertical: 9,
-    borderRadius: 3,
+    borderRadius: 6,
   },
   tableRow: {
     flexDirection: "row",
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8fafc", // Alternating rows
   },
   th: {
-    fontSize: 12,
+    fontSize: 10.5,
     fontFamily: "Helvetica-Bold",
     color: "#ffffff",
     textAlign: "center",
@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1b2536",
     paddingVertical: 7,
     paddingHorizontal: 5,
-    borderRadius: 3,
+    borderRadius: 6,
     marginTop: 2,
   },
   calcLabelTotal: {
@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1b2536",
     paddingVertical: 7,
     paddingHorizontal: 5,
-    borderRadius: 3,
+    borderRadius: 6,
     marginTop: 2,
   },
   summaryLabelTotal: {
