@@ -274,14 +274,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8fafc", // Alternating rows
   },
   th: {
-    fontSize: 10.5,
+    fontSize: 9,
     fontFamily: "Helvetica-Bold",
     color: "#ffffff",
     textAlign: "center",
     paddingHorizontal: 2,
   },
   td: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#334155",
     paddingHorizontal: 2,
   },
@@ -305,20 +305,20 @@ const styles = StyleSheet.create({
   },
   calcLabel: {
     fontFamily: "Helvetica",
-    fontSize: 12,
+    fontSize: 10.5,
     color: "#475569",
     width: "55%",
   },
   calcValue: {
     fontFamily: "Helvetica",
-    fontSize: 12,
+    fontSize: 10.5,
     textAlign: "right",
     width: "45%",
     color: "#0f172a",
   },
   calcValueBold: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 12,
+    fontSize: 10.5,
     textAlign: "right",
     width: "45%",
     color: "#0f172a",
@@ -327,19 +327,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "#1b2536",
-    paddingVertical: 7,
+    paddingVertical: 6,
     paddingHorizontal: 5,
     borderRadius: 6,
     marginTop: 2,
   },
   calcLabelTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 12,
+    fontSize: 10.5,
     color: "#ffffff",
   },
   calcValueTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 12,
+    fontSize: 10.5,
     textAlign: "right",
     color: "#ffffff",
   },
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   summaryTitle: {
-    fontSize: 12,
+    fontSize: 10.5,
     fontFamily: "Helvetica-Bold",
     color: "#0f172a",
     marginBottom: 3,
@@ -362,41 +362,41 @@ const styles = StyleSheet.create({
   summaryRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 4,
+    marginBottom: 3,
     paddingVertical: 1,
   },
   summaryLabel: {
-    fontSize: 12,
+    fontSize: 10.5,
     color: "#475569",
   },
   summaryValue: {
     fontFamily: "Helvetica",
-    fontSize: 12,
+    fontSize: 10.5,
     textAlign: "right",
     color: "#0f172a",
   },
   summaryDivider: {
     borderTopWidth: 0.5,
     borderTopColor: "#cbd5e1",
-    marginVertical: 6,
+    marginVertical: 5,
   },
   summaryRowTotal: {
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "#1b2536",
-    paddingVertical: 7,
+    paddingVertical: 6,
     paddingHorizontal: 5,
     borderRadius: 6,
     marginTop: 2,
   },
   summaryLabelTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 12,
+    fontSize: 10.5,
     color: "#ffffff",
   },
   summaryValueTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 12,
+    fontSize: 10.5,
     textAlign: "right",
     color: "#ffffff",
   },
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   signatureLabel: {
-    fontSize: 11.5,
+    fontSize: 10,
     fontFamily: "Helvetica-Bold",
     color: "#0f172a",
     borderTopWidth: 1,
@@ -450,13 +450,13 @@ const styles = StyleSheet.create({
   },
   grandTotalLabel: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 12,
+    fontSize: 10.5,
     color: "#ffffff",
     letterSpacing: 0.3,
   },
   grandTotalValue: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 13,
+    fontSize: 11,
     color: "#ffffff",
     textAlign: "right",
   },
@@ -949,6 +949,12 @@ export function InvoicePdfDocument({
                         <Text style={styles.summaryValueTotal}>{formatRpPdf(invoice.grandTotal)}</Text>
                       </View>
                     </View>
+
+                    {/* TOTAL KESELURUHAN di bawah ringkasan */}
+                    <View style={[styles.grandTotalBox, { marginTop: 6 }]}>
+                      <Text style={styles.grandTotalLabel}>TOTAL KESELURUHAN</Text>
+                      <Text style={styles.grandTotalValue}>{formatRpPdf(invoice.grandTotal)}</Text>
+                    </View>
                   </View>
                 ) : (
                   <View style={styles.bottomLeftCol} />
@@ -972,14 +978,6 @@ export function InvoicePdfDocument({
                       <Text style={styles.calcValueTotal}>{formatRpPdf(plantInfo.subtotal)}</Text>
                     </View>
                   </View>
-
-                  {/* Grand Total shown only on the very last page */}
-                  {isLastPage && (!plantId || isLastPlantOverall) && (
-                    <View style={styles.grandTotalBox}>
-                      <Text style={styles.grandTotalLabel}>TOTAL KESELURUHAN</Text>
-                      <Text style={styles.grandTotalValue}>{formatRpPdf(invoice.grandTotal)}</Text>
-                    </View>
-                  )}
 
                   <View style={styles.signatureContainer}>
                     <View style={{ height: 50 }} />
