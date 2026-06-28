@@ -208,23 +208,43 @@ export async function getInvoiceById(id: string): Promise<Invoice | null> {
 }
 
 export async function getNextInvoiceNumber(
-  bulan: number,
-  tahun: number
+  invoiceDateStr: string
 ): Promise<string> {
-  const prefix = `INV-${tahun}-${String(bulan).padStart(2, "0")}`;
+  const [yearStr, monthStr, dayStr] = invoiceDateStr.split("-");
+  const year = parseInt(yearStr, 10);
+  const monthIndex = parseInt(monthStr, 10) - 1;
+  const date = parseInt(dayStr, 10);
+
+  const monthNames = [
+    "JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI",
+    "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"
+  ];
+  const month = monthNames[monthIndex];
+  const prefix = `INV-${date}-${month}-${year}-WANNA`;
+
   const snap = await getDocs(collection(getFirebaseDb(), INVOICES));
 
-  const invoiceNums = snap.docs
+  const existingNums = snap.docs
     .map((d) => d.data().nomorInvoice as string)
-    .filter((num) => num && num.startsWith(prefix));
+    .filter((num) => num === prefix || num.startsWith(`${prefix}-`));
 
-  if (invoiceNums.length === 0) return `${prefix}-001`;
+  if (existingNums.length === 0) {
+    return prefix;
+  }
 
-  // Sort lexicographically
-  invoiceNums.sort();
-  const lastNum = invoiceNums[invoiceNums.length - 1];
-  const seq = parseInt(lastNum.split("-").pop() || "0", 10);
-  return `${prefix}-${String(seq + 1).padStart(3, "0")}`;
+  let maxSuffix = 0;
+  for (const num of existingNums) {
+    if (num === prefix) {
+      continue;
+    }
+    const suffixStr = num.substring(prefix.length + 1);
+    const suffixNum = parseInt(suffixStr, 10);
+    if (!isNaN(suffixNum) && suffixNum > maxSuffix) {
+      maxSuffix = suffixNum;
+    }
+  }
+
+  return `${prefix}-${maxSuffix + 1}`;
 }
 
 export async function addInvoice(

@@ -247,8 +247,8 @@ export default function CreateInvoicePage() {
       const bulan = invDateObj.getMonth() + 1;
       const tahun = invDateObj.getFullYear();
 
-      // Auto numbering prefix INV-YYYY-MM
-      const nomorInvoice = await getNextInvoiceNumber(bulan, tahun);
+      // Auto numbering prefix INV-{date}-{month}-{year}-WANNA
+      const nomorInvoice = await getNextInvoiceNumber(invoiceDate);
 
       const sortedDetails = [...additionalCosts]
         .filter((c) => c.nominal !== 0)
