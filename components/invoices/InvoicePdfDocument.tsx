@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   calcRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 1.5,
+    marginBottom: 4,
   },
   calcLabel: {
     fontFamily: "Helvetica",
@@ -362,7 +362,8 @@ const styles = StyleSheet.create({
   summaryRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 2,
+    marginBottom: 4,
+    paddingVertical: 1,
   },
   summaryLabel: {
     fontSize: 12,
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
   summaryDivider: {
     borderTopWidth: 0.5,
     borderTopColor: "#cbd5e1",
-    marginVertical: 4,
+    marginVertical: 6,
   },
   summaryRowTotal: {
     flexDirection: "row",
@@ -426,7 +427,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginTop: 8,
+    marginTop: 14,
   },
   bottomLeftCol: {
     width: "48%",
@@ -435,6 +436,29 @@ const styles = StyleSheet.create({
     width: "45%",
     flexDirection: "column",
     alignItems: "flex-end",
+  },
+  grandTotalBox: {
+    width: "100%",
+    backgroundColor: "#0e57c2",
+    borderRadius: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    marginTop: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  grandTotalLabel: {
+    fontFamily: "Helvetica-Bold",
+    fontSize: 12,
+    color: "#ffffff",
+    letterSpacing: 0.3,
+  },
+  grandTotalValue: {
+    fontFamily: "Helvetica-Bold",
+    fontSize: 13,
+    color: "#ffffff",
+    textAlign: "right",
   },
 });
 
@@ -470,9 +494,20 @@ interface Props {
   trips: Trip[];
   company: CompanyProfile;
   plantId?: string;
+  isCombined?: boolean;
+  combinedInvoices?: Invoice[];
+  combinedTrips?: Trip[][];
 }
 
-export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) {
+export function InvoicePdfDocument({
+  invoice,
+  trips,
+  company,
+  plantId,
+  isCombined,
+  combinedInvoices,
+  combinedTrips,
+}: Props) {
   // Full list of all plant keys in this invoice (used to determine which is the last plant)
   const allPlantIds = Object.keys(invoice.subtotalPlant);
 
@@ -491,6 +526,239 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
 
   const logoPath = path.join(process.cwd(), "public", "Bja-logo-v4.png");
 
+  if (isCombined && combinedInvoices && combinedTrips) {
+    const subInvoicePages = combinedInvoices.flatMap((subInvoice, subIdx) => {
+      const subTrips = combinedTrips[subIdx] || [];
+      const allSubPlantIds = Object.keys(subInvoice.subtotalPlant);
+      const isLastSubInvoice = subIdx === combinedInvoices.length - 1;
+
+      return allSubPlantIds.map((pid, index) => {
+        const plantInfo = subInvoice.subtotalPlant[pid];
+        const parts = pid.split("_");
+        const parsedPlantId = parts[0];
+        const parsedJenisBarang = parts.length > 1 ? (parts.length > 2 ? parts.slice(1, -1).join("_") : parts.slice(1).join("_")) : null;
+
+        const plantTrips = subTrips
+          .filter((t) => {
+            if (t.plantId !== parsedPlantId) return false;
+            if (!parsedJenisBarang) return true;
+            return (t.jenisBarang || "split").toLowerCase() === parsedJenisBarang.toLowerCase();
+          })
+          .sort((a, b) => a.tanggal.localeCompare(b.tanggal));
+
+        const isLastPage = index === allSubPlantIds.length - 1;
+        // True only for the very last plant page of the very last sub-invoice
+        const isLastOverall = isLastSubInvoice && isLastPage;
+        const displayPlantNama = plantInfo.plantNama.toUpperCase().startsWith("PLANT")
+          ? plantInfo.plantNama.toUpperCase()
+          : `PLANT ${plantInfo.plantNama.toUpperCase()}`;
+
+        return (
+          <Page key={`${subInvoice.id}_${pid}`} size="A4" style={styles.page}>
+            <RenderPageHeader />
+            <View style={styles.contentWrapper}>
+              <View style={styles.bodyHeaderRow}>
+                <View style={styles.bodyHeaderLeft}>
+                  <Text style={styles.metaInvoiceTitle}>TAGIHAN / INVOICE</Text>
+                  <Text style={styles.metaPlantBadge}>{displayPlantNama}</Text>
+                  <View style={styles.metaTable}>
+                    <View style={styles.metaTableRow}>
+                      <Text style={styles.metaTableLabel}>NO. INVOICE :</Text>
+                      <Text style={styles.metaTableValue}>{subInvoice.nomorInvoice}</Text>
+                    </View>
+                    <View style={styles.metaTableRow}>
+                      <Text style={styles.metaTableLabel}>TANGGAL :</Text>
+                      <Text style={styles.metaTableValue}>{formatDateExcel(subInvoice.invoiceDate)}</Text>
+                    </View>
+                    {subInvoice.startDate && subInvoice.endDate && (
+                      <View style={styles.metaTableRow}>
+                        <Text style={styles.metaTableLabel}>PERIODE :</Text>
+                        <Text style={styles.metaTableValue}>
+                          {formatDateExcel(subInvoice.startDate)} - {formatDateExcel(subInvoice.endDate)}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                </View>
+                <View style={styles.bodyHeaderRight}>
+                  <Image src={logoPath} style={styles.logo} />
+                  <View style={styles.companyInfoBlock}>
+                    <Text style={styles.companyAddressText}>Kp. Tunggilis RT 002/007, Desa Situsari,</Text>
+                    <Text style={styles.companyAddressText}>Kec. Cileungsi, Kab. Bogor, Jawa Barat</Text>
+                    <Text style={styles.companyAddressText}>No. HP: {c.noHp}</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.detailsRow}>
+                <View style={styles.detailsColumnLeft}>
+                  <Text style={styles.columnTitle}>DITERBITKAN KEPADA</Text>
+                  <Text style={styles.columnTextBold}>PT. WANNA MULIA SEJAHTERA</Text>
+                  <Text style={styles.columnText}>Kecamatan Cileungsi</Text>
+                  <Text style={styles.columnText}>Kabupaten Bogor, Jawa Barat</Text>
+                </View>
+                <View style={styles.detailsColumnRight}>
+                  <Text style={styles.columnTitle}>INFORMASI PEMBAYARAN</Text>
+                  <Text style={styles.columnTextBold}>Bank {c.bank}</Text>
+                  <Text style={styles.columnText}>Nama Rekening: {c.atasNama}</Text>
+                  <Text style={styles.columnText}>Nomor Rekening: {c.rekening}</Text>
+                </View>
+              </View>
+
+              <View style={styles.table}>
+                <View style={styles.tableHeader}>
+                  <Text style={[styles.th, { width: "4%" }]}>NO</Text>
+                  <Text style={[styles.th, { width: "15%" }]}>TANGGAL</Text>
+                  <Text style={[styles.th, { width: "17%" }]}>NO. POLISI</Text>
+                  <Text style={[styles.th, { width: "14%" }]}>NO. SRT JLN</Text>
+                  <Text style={[styles.th, { width: "11%" }]}>JENIS</Text>
+                  <Text style={[styles.th, { width: "13%" }]}>TON KUARI</Text>
+                  <Text style={[styles.th, { width: "13%" }]}>TON PLAN</Text>
+                  <Text style={[styles.th, { width: "13%" }]}>KUBIKASI</Text>
+                </View>
+                {plantTrips.map((t, i) => (
+                  <View key={t.id} style={[styles.tableRow, i % 2 === 1 ? styles.tableRowEven : {}]}>
+                    <Text style={[styles.td, { width: "4%", textAlign: "center" }]}>{i + 1}</Text>
+                    <Text style={[styles.td, { width: "15%", textAlign: "center" }]}>{formatDateExcel(t.tanggal)}</Text>
+                    <Text style={[styles.td, { width: "17%", textAlign: "center" }]}>{t.noPolisi}</Text>
+                    <Text style={[styles.td, { width: "14%", textAlign: "center" }]}>{t.noSuratJalan}</Text>
+                    <Text style={[styles.td, { width: "11%", textAlign: "center" }]}>{t.jenisBarang}</Text>
+                    <Text style={[styles.td, { width: "13%", textAlign: "center" }]}>
+                      {t.tonaseKuari !== null && t.tonaseKuari !== undefined && Number(t.tonaseKuari) !== 0 && !isNaN(Number(t.tonaseKuari))
+                        ? formatNumberPdf(Number(t.tonaseKuari), 2)
+                        : "-"}
+                    </Text>
+                    <Text style={[styles.td, { width: "13%", textAlign: "center" }]}>
+                      {t.tonasePlan !== null && t.tonasePlan !== undefined && Number(t.tonasePlan) !== 0 && !isNaN(Number(t.tonasePlan))
+                        ? formatNumberPdf(Number(t.tonasePlan), 3)
+                        : "-"}
+                    </Text>
+                    <Text style={[styles.td, { width: "13%", textAlign: "center" }]}>{formatNumberPdf(t.kubikasi ?? 0, 2)}</Text>
+                  </View>
+                ))}
+              </View>
+
+              <View style={styles.bottomSection} wrap={false}>
+                {isLastPage ? (
+                  <View style={styles.bottomLeftCol}>
+                    {/* Ringkasan Rekap Plant (invoice ini) */}
+                    <View style={styles.summaryContainer}>
+                      <Text style={styles.summaryTitle}>RINGKASAN REKAP PLANT</Text>
+                      <View style={styles.summaryDivider} />
+                      {Object.keys(subInvoice.subtotalPlant).map((spid) => {
+                        const p = subInvoice.subtotalPlant[spid];
+                        const label = `${p.plantNama.replace("Plant ", "")} ${p.jenisBarang ? `- ${p.jenisBarang}` : ""}`;
+                        return (
+                          <View key={spid} style={styles.summaryRow}>
+                            <Text style={styles.summaryLabel}>{label}</Text>
+                            <Text style={styles.summaryValue}>{formatRpPdf(p.subtotal)}</Text>
+                          </View>
+                        );
+                      })}
+                      {subInvoice.biayaTambahanDetail && subInvoice.biayaTambahanDetail.length > 0 ? (
+                        [...subInvoice.biayaTambahanDetail]
+                          .sort((a, b) => {
+                            if (a.nominal >= 0 && b.nominal < 0) return -1;
+                            if (a.nominal < 0 && b.nominal >= 0) return 1;
+                            return 0;
+                          })
+                          .map((cost) => (
+                            cost.nominal !== 0 && (
+                              <View key={cost.nama} style={styles.summaryRow}>
+                                <Text style={styles.summaryLabel}>{cost.nama}</Text>
+                                <Text style={styles.summaryValue}>{formatRpPdf(cost.nominal)}</Text>
+                              </View>
+                            )
+                          ))
+                      ) : (
+                        subInvoice.biayaTambahan !== 0 && (
+                          <View style={styles.summaryRow}>
+                            <Text style={styles.summaryLabel}>Biaya Tambahan</Text>
+                            <Text style={styles.summaryValue}>{formatRpPdf(subInvoice.biayaTambahan)}</Text>
+                          </View>
+                        )
+                      )}
+                      <View style={styles.summaryDivider} />
+                      <View style={styles.summaryRowTotal}>
+                        <Text style={styles.summaryLabelTotal}>JUMLAH TOTAL</Text>
+                        <Text style={styles.summaryValueTotal}>{formatRpPdf(subInvoice.grandTotal)}</Text>
+                      </View>
+                    </View>
+
+                    {/* Rekap Keseluruhan hanya di halaman terakhir invoice terakhir */}
+                    {isLastOverall && (
+                      <View style={[styles.summaryContainer, { marginTop: 6 }]}>
+                        <Text style={styles.summaryTitle}>TOTAL KESELURUHAN</Text>
+                        <View style={styles.summaryDivider} />
+                        {combinedInvoices.map((inv, ci) => (
+                          <View key={inv.id} style={[styles.summaryRow, { marginBottom: 3 }]}>
+                            <Text style={[styles.summaryLabel, { fontSize: 10, flex: 1 }]}>
+                              {ci + 1}. {inv.nomorInvoice}
+                            </Text>
+                            <Text style={[styles.summaryValue, { fontSize: 10, minWidth: 90 }]}>
+                              {formatRpPdf(inv.grandTotal)}
+                            </Text>
+                          </View>
+                        ))}
+                        <View style={styles.summaryDivider} />
+                        <View style={styles.summaryRowTotal}>
+                          <Text style={styles.summaryLabelTotal}>TOTAL</Text>
+                          <Text style={styles.summaryValueTotal}>{formatRpPdf(invoice.grandTotal)}</Text>
+                        </View>
+                      </View>
+                    )}
+                  </View>
+                ) : (
+                  <View style={styles.bottomLeftCol} />
+                )}
+
+                <View style={styles.bottomRightCol}>
+                  <View style={styles.calcBox}>
+                    <View style={styles.calcRow}>
+                      <Text style={styles.calcLabel}>Jumlah Kubikasi :</Text>
+                      <Text style={styles.calcValueBold}>{formatNumberPdf(plantInfo.totalKubikasi, 3)} m³</Text>
+                    </View>
+                    <View style={styles.calcRow}>
+                      <Text style={styles.calcLabel}>Jumlah {plantInfo.jenisBarang || "Split"} :</Text>
+                      <Text style={styles.calcValue}>
+                        {formatNumberPdf(plantInfo.totalKubikasi, 3)} x {formatNumberPdf(plantInfo.hargaPerM3, 0)}
+                      </Text>
+                    </View>
+                    <View style={styles.calcRowTotal}>
+                      <Text style={styles.calcLabelTotal}>Sub Total :</Text>
+                      <Text style={styles.calcValueTotal}>{formatRpPdf(plantInfo.subtotal)}</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.signatureContainer}>
+                    <View style={{ height: 50 }} />
+                    <Text style={styles.signatureLabel}>H. SUPANDI</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={styles.footerContainer} fixed>
+              <Svg style={styles.footerSvg} viewBox="0 0 595 60">
+                <Path d="M 0 60 L 595 60 L 595 15 C 450 45, 200 -5, 0 20 Z" fill="#1b2536" />
+                <Path d="M 0 60 L 320 60 C 240 38, 120 20, 0 47 Z" fill="#0e57c2" />
+              </Svg>
+            </View>
+          </Page>
+        );
+      });
+    });
+
+    return (
+      <Document
+        title={invoice.nomorInvoice}
+        author="BJA Report"
+        subject={`Invoice Gabungan ${invoice.nomorInvoice}`}
+      >
+        {subInvoicePages}
+      </Document>
+    );
+  }
+
   return (
     <Document
       title={invoice.nomorInvoice}
@@ -501,8 +769,9 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
         const plantInfo = invoice.subtotalPlant[pid];
 
         // pid is formatted as "plantId_jenisBarang" or just "plantId" (old data)
-        const parsedPlantId = pid.includes("_") ? pid.split("_")[0] : pid;
-        const parsedJenisBarang = pid.includes("_") ? pid.split("_").slice(1).join("_") : null;
+        const parts = pid.split("_");
+        const parsedPlantId = parts[0];
+        const parsedJenisBarang = parts.length > 1 ? (parts.length > 2 ? parts.slice(1, -1).join("_") : parts.slice(1).join("_")) : null;
 
         const plantTrips = trips
           .filter((t) => {
@@ -704,6 +973,14 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
                     </View>
                   </View>
 
+                  {/* Grand Total shown only on the very last page */}
+                  {isLastPage && (!plantId || isLastPlantOverall) && (
+                    <View style={styles.grandTotalBox}>
+                      <Text style={styles.grandTotalLabel}>TOTAL KESELURUHAN</Text>
+                      <Text style={styles.grandTotalValue}>{formatRpPdf(invoice.grandTotal)}</Text>
+                    </View>
+                  )}
+
                   <View style={styles.signatureContainer}>
                     <View style={{ height: 50 }} />
                     <Text style={styles.signatureLabel}>H. SUPANDI</Text>
@@ -718,12 +995,6 @@ export function InvoicePdfDocument({ invoice, trips, company, plantId }: Props) 
                 <Path d="M 0 60 L 595 60 L 595 15 C 450 45, 200 -5, 0 20 Z" fill="#1b2536" />
                 <Path d="M 0 60 L 320 60 C 240 38, 120 20, 0 47 Z" fill="#0e57c2" />
               </Svg>
-              {/* <View style={styles.footerTextSection}>
-                <Text style={styles.footerLabel}>HUBUNGI KAMI :</Text>
-                <Text style={styles.footerValue}>{c.noHp}</Text>
-                <Text style={[styles.footerLabel, { marginLeft: 15 }]}>ALAMAT :</Text>
-                <Text style={styles.footerValue}>Desa Situsari, Cileungsi, Bogor</Text>
-              </View> */}
             </View>
           </Page>
         );

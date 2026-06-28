@@ -117,14 +117,17 @@ export async function POST(req: NextRequest) {
       invoice: Invoice;
       trips: Trip[];
       company: CompanyProfile;
+      isCombined?: boolean;
+      combinedInvoices?: Invoice[];
+      combinedTrips?: Trip[][];
     };
 
-    const { invoice, trips, company } = body;
+    const { invoice, trips, company, isCombined, combinedInvoices, combinedTrips } = body;
 
     // Generate PDF buffer
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const buffer = await renderToBuffer(
-      createElement(InvoicePdfDocument, { invoice, trips, company }) as any
+      createElement(InvoicePdfDocument, { invoice, trips, company, isCombined, combinedInvoices, combinedTrips }) as any
     );
 
     // Upload to Cloudinary
@@ -167,25 +170,50 @@ export async function GET(req: NextRequest) {
     }
 
     // Fetch invoice details using REST API with authentication
-    const invoice = await fetchRestDoc("invoices", id, token) as Invoice;
+    const invoice = await fetchRestDoc("invoices", id, token) as any;
 
-    // Fetch related invoiceItems
-    const invoiceItems = await queryRestDocs("invoiceItems", "invoiceId", id, token);
-    const tripIds = invoiceItems.map((item: any) => item.tripId).filter(Boolean);
-
-    // Fetch trips details
+    const isCombined = !!invoice.isCombined;
+    const combinedInvoices: Invoice[] = [];
+    const combinedTrips: Trip[][] = [];
     const trips: Trip[] = [];
-    if (tripIds.length > 0) {
-      const tripPromises = tripIds.map((tid: string) =>
-        fetchRestDoc("trips", tid, token).catch((e) => {
-          console.error(`Error loading trip ${tid}:`, e);
-          return null;
-        })
-      );
-      const tripDocs = await Promise.all(tripPromises);
-      trips.push(...(tripDocs.filter(Boolean) as Trip[]));
-      // Sort trips by date ascending
-      trips.sort((a, b) => a.tanggal.localeCompare(b.tanggal));
+
+    if (isCombined && invoice.combinedInvoiceIds) {
+      for (const cid of invoice.combinedInvoiceIds) {
+        const subInv = await fetchRestDoc("invoices", cid, token) as Invoice;
+        combinedInvoices.push(subInv);
+
+        // Fetch sub-invoice items
+        const subItems = await queryRestDocs("invoiceItems", "invoiceId", cid, token);
+        const subTripIds = subItems.map((item: any) => item.tripId).filter(Boolean);
+        const subTrips: Trip[] = [];
+        if (subTripIds.length > 0) {
+          const tripPromises = subTripIds.map((tid: string) =>
+            fetchRestDoc("trips", tid, token).catch(() => null)
+          );
+          const tripDocs = await Promise.all(tripPromises);
+          subTrips.push(...(tripDocs.filter(Boolean) as Trip[]));
+          subTrips.sort((a, b) => a.tanggal.localeCompare(b.tanggal));
+        }
+        combinedTrips.push(subTrips);
+      }
+    } else {
+      // Fetch related invoiceItems for single invoice
+      const invoiceItems = await queryRestDocs("invoiceItems", "invoiceId", id, token);
+      const tripIds = invoiceItems.map((item: any) => item.tripId).filter(Boolean);
+
+      // Fetch trips details
+      if (tripIds.length > 0) {
+        const tripPromises = tripIds.map((tid: string) =>
+          fetchRestDoc("trips", tid, token).catch((e) => {
+            console.error(`Error loading trip ${tid}:`, e);
+            return null;
+          })
+        );
+        const tripDocs = await Promise.all(tripPromises);
+        trips.push(...(tripDocs.filter(Boolean) as Trip[]));
+        // Sort trips by date ascending
+        trips.sort((a, b) => a.tanggal.localeCompare(b.tanggal));
+      }
     }
 
     // Fetch company profile
@@ -206,7 +234,15 @@ export async function GET(req: NextRequest) {
     // Render PDF buffer
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const buffer = await renderToBuffer(
-      createElement(InvoicePdfDocument, { invoice, trips, company, plantId }) as any
+      createElement(InvoicePdfDocument, {
+        invoice,
+        trips,
+        company,
+        plantId,
+        isCombined,
+        combinedInvoices: isCombined ? combinedInvoices : undefined,
+        combinedTrips: isCombined ? combinedTrips : undefined
+      }) as any
     );
 
     // Determine filename

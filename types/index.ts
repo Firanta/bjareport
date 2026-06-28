@@ -83,6 +83,8 @@ export interface Invoice {
   biayaTambahanDetail?: { nama: string; nominal: number }[];
   grandTotal: number;
   pdfUrl: string;            // Cloudinary URL
+  isCombined?: boolean;
+  combinedInvoiceIds?: string[];
   createdAt: Timestamp;
 }
 
