@@ -63,7 +63,7 @@ function formatNumberPdf(val: number, decimals = 3): string {
 const styles = StyleSheet.create({
   page: {
     fontFamily: "Helvetica",
-    fontSize: 8.5,
+    fontSize: 9.5,
     color: "#334155", // Slate 700 for softer body text
     backgroundColor: "#ffffff",
     paddingBottom: 70, // Safety padding for absolute footer
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   companyAddressText: {
-    fontSize: 7,
+    fontSize: 8.5,
     color: "#64748b", // Slate 500
     lineHeight: 1.2,
     textAlign: "right",
@@ -204,16 +204,16 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   metaTableLabel: {
-    fontSize: 7,
+    fontSize: 8.5,
     fontFamily: "Helvetica-Bold",
     color: "#64748b",
-    width: 60,
+    width: 65,
     textAlign: "left",
   },
   metaTableValue: {
-    fontSize: 7,
+    fontSize: 8.5,
     color: "#0f172a",
-    width: 120,
+    width: 125,
     textAlign: "left",
   },
   // Two column details: Billing info & Payment info
@@ -234,20 +234,20 @@ const styles = StyleSheet.create({
     width: "48%",
   },
   columnTitle: {
-    fontSize: 7,
+    fontSize: 8.5,
     fontFamily: "Helvetica-Bold",
     color: "#64748b",
     marginBottom: 3,
     letterSpacing: 0.5,
   },
   columnTextBold: {
-    fontSize: 8,
+    fontSize: 9.5,
     fontFamily: "Helvetica-Bold",
     color: "#0f172a",
     marginBottom: 1.5,
   },
   columnText: {
-    fontSize: 7,
+    fontSize: 8.5,
     color: "#475569",
     lineHeight: 1.2,
   },
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#1b2536", // Dark navy header
     alignItems: "center",
-    paddingVertical: 4,
+    paddingVertical: 6,
     borderRadius: 3,
   },
   tableRow: {
@@ -268,20 +268,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: "#cbd5e1",
     alignItems: "center",
-    paddingVertical: 2.5, // Even more compact
+    paddingVertical: 4,
   },
   tableRowEven: {
     backgroundColor: "#f8fafc", // Alternating rows
   },
   th: {
-    fontSize: 6.5,
+    fontSize: 8,
     fontFamily: "Helvetica-Bold",
     color: "#ffffff",
     textAlign: "center",
     paddingHorizontal: 2,
   },
   td: {
-    fontSize: 6.5,
+    fontSize: 8,
     color: "#334155",
     paddingHorizontal: 2,
   },
@@ -305,20 +305,20 @@ const styles = StyleSheet.create({
   },
   calcLabel: {
     fontFamily: "Helvetica",
-    fontSize: 7,
+    fontSize: 8.5,
     color: "#475569",
     width: "55%",
   },
   calcValue: {
     fontFamily: "Helvetica",
-    fontSize: 7,
+    fontSize: 8.5,
     textAlign: "right",
     width: "45%",
     color: "#0f172a",
   },
   calcValueBold: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 7,
+    fontSize: 8.5,
     textAlign: "right",
     width: "45%",
     color: "#0f172a",
@@ -327,19 +327,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "#1b2536",
-    paddingVertical: 4,
+    paddingVertical: 6,
     paddingHorizontal: 5,
     borderRadius: 3,
     marginTop: 2,
   },
   calcLabelTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 7.5,
+    fontSize: 9,
     color: "#ffffff",
   },
   calcValueTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 7.5,
+    fontSize: 9,
     textAlign: "right",
     color: "#ffffff",
   },
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   summaryTitle: {
-    fontSize: 7.5,
+    fontSize: 9,
     fontFamily: "Helvetica-Bold",
     color: "#0f172a",
     marginBottom: 3,
@@ -365,12 +365,12 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   summaryLabel: {
-    fontSize: 7,
+    fontSize: 8.5,
     color: "#475569",
   },
   summaryValue: {
     fontFamily: "Helvetica",
-    fontSize: 7,
+    fontSize: 8.5,
     textAlign: "right",
     color: "#0f172a",
   },
@@ -383,19 +383,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "#1b2536",
-    paddingVertical: 4,
+    paddingVertical: 6,
     paddingHorizontal: 5,
     borderRadius: 3,
     marginTop: 2,
   },
   summaryLabelTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 7.5,
+    fontSize: 9.5,
     color: "#ffffff",
   },
   summaryValueTotal: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 7.5,
+    fontSize: 9.5,
     textAlign: "right",
     color: "#ffffff",
   },
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   signatureLabel: {
-    fontSize: 8,
+    fontSize: 9.5,
     fontFamily: "Helvetica-Bold",
     color: "#0f172a",
     borderTopWidth: 1,
