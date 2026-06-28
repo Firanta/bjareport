@@ -52,6 +52,7 @@ export default function CreateInvoicePage() {
   const [selectedTripIds, setSelectedTripIds] = useState<Set<string>>(new Set());
   const [additionalCosts, setAdditionalCosts] = useState<{ id: string; nama: string; nominal: number }[]>([]);
   const [includeKarangTaruna, setIncludeKarangTaruna] = useState(true);
+  const [customPrices, setCustomPrices] = useState<Record<string, number>>({});
   const [generating, setGenerating] = useState(false);
   const [generatedInvoice, setGeneratedInvoice] = useState<{
     id: string;
@@ -227,9 +228,10 @@ export default function CreateInvoicePage() {
         kubikasi: t.kubikasi
       })),
       plantsForCalc,
-      totalAdditional
+      totalAdditional,
+      customPrices
     );
-  }, [selectedTrips, plantsForCalc, totalAdditional]);
+  }, [selectedTrips, plantsForCalc, totalAdditional, customPrices]);
 
   // Form submit / Generate PDF
   const handleGenerate = async () => {
@@ -586,9 +588,9 @@ export default function CreateInvoicePage() {
               <div className="space-y-4">
                 {/* Plant list */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {Object.entries(subtotalPlant).map(([plantId, data]) => (
+                  {Object.entries(subtotalPlant).map(([key, data]) => (
                     <div
-                      key={plantId}
+                      key={key}
                       className="p-3.5 rounded-xl border flex flex-col justify-between"
                       style={{ background: "rgba(255,255,255,0.02)", borderColor: "rgba(255,255,255,0.06)" }}
                     >
@@ -600,9 +602,24 @@ export default function CreateInvoicePage() {
                         <p className="text-sm font-semibold mt-1.5" style={{ color: "rgba(255,255,255,0.85)" }}>
                           {formatNumber(data.totalKubikasi, 3)} m³
                         </p>
-                        <p className="text-[10px] mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>
-                          Harga: {formatRupiah(data.hargaPerM3)}/m³
-                        </p>
+                        <div className="form-group mt-2">
+                          <label className="text-[10px]" style={{ color: "rgba(255,255,255,0.35)" }}>
+                            Harga (Rp/m³)
+                          </label>
+                          <input
+                            type="number"
+                            className="form-input text-xs py-1.5 px-2.5 mt-0.5"
+                            value={customPrices[key] !== undefined ? customPrices[key] : data.hargaPerM3}
+                            onChange={(e) => {
+                              const val = Number(e.target.value);
+                              setCustomPrices((prev) => ({
+                                ...prev,
+                                [key]: val,
+                              }));
+                              setGeneratedInvoice(null);
+                            }}
+                          />
+                        </div>
                       </div>
                       <p className="font-bold text-sm mt-3 text-right" style={{ color: "var(--brand-400)" }}>
                         {formatRupiah(data.subtotal)}

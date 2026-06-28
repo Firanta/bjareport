@@ -52,7 +52,8 @@ export function getCurrentMonthYear(): { bulan: number; tahun: number } {
 export function calculateInvoiceTotals(
   trips: { plantId: string; plantNama: string; jenisBarang: string; kubikasi: number }[],
   plants: { id: string; items?: { nama: string; hargaPerM3: number }[]; hargaPerM3?: number }[],
-  additionalCosts: number
+  additionalCosts: number,
+  customPrices?: Record<string, number>
 ) {
   const plantMap = new Map(plants.map((p) => [p.id, p]));
 
@@ -83,6 +84,11 @@ export function calculateInvoiceTotals(
         if (matchedItem) {
           harga = matchedItem.hargaPerM3;
         }
+      }
+
+      // Check if there is an override price in customPrices
+      if (customPrices && customPrices[key] !== undefined) {
+        harga = customPrices[key];
       }
 
       // Display jenisBarang with title case for consistency (e.g. "Split" not "split")
